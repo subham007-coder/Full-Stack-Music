@@ -5,20 +5,19 @@ import CreateAccount from './Components/CreateAccount';
 import ChooseArtists from './Components/ChooseArtists';
 import ChooseSongLanguage from './Components/ChooseSongLanguage';
 import Home from './Components/Home';
+import PlayerPage from './Components/PlayerPage';
+import { AudioProvider } from './context/AudioContext';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/create-account" element={<CreateAccount />} />
-        <Route path="/choose-artists" element={<ChooseArtists />} />
-        <Route path="/choose-language" element={<ChooseSongLanguage />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </Router>
+    <AudioProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/player" element={<PlayerPage />} />
+        </Routes>
+      </Router>
+    </AudioProvider>
   );
 }
 
