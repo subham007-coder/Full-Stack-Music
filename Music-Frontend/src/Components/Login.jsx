@@ -1,6 +1,7 @@
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import { HiPhone } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   return (
@@ -49,10 +50,10 @@ const Login = () => {
 
           {/* Login Link */}
           <div className="text-center">
-            <span className="text-gray-400">Already have an account?</span>
-            <a href="/login" className="text-white hover:underline ml-2">
-              Log in
-            </a>
+            <span className="text-gray-400">Don't have an account?</span>
+            <Link to="/create-account" className="text-white hover:underline ml-2">
+              Sign up
+            </Link>
           </div>
         </div>
       </div>

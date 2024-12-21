@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 const CreateAccount = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -154,9 +155,9 @@ const CreateAccount = () => {
           {/* Login Link */}
           <div className="text-center pt-4">
             <span className="text-gray-400 text-sm">Already have an account?</span>
-            <a href="/login" className="text-white hover:underline ml-2 text-sm">
+            <Link to="/login" className="text-white hover:underline ml-2 text-sm">
               Log in
-            </a>
+            </Link>
           </div>
         </form>
       </div>
