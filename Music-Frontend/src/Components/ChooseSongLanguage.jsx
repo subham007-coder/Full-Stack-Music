@@ -6,14 +6,14 @@ const ChooseSongLanguage = () => {
 
   // Example languages - replace with your actual language data
   const languages = [
-    { id: 1, name: 'Hindi', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
-    { id: 2, name: 'English', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
-    { id: 3, name: 'Punjabi', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
-    { id: 4, name: 'Tamil', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
-    { id: 5, name: 'Telugu', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
-    { id: 6, name: 'Malayalam', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
-    { id: 7, name: 'Kannada', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
-    { id: 8, name: 'Bengali', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 1, name: 'Hindi', bgcolor: 'bg-red-500' },
+    { id: 2, name: 'English', bgcolor: 'bg-blue-500' },
+    { id: 3, name: 'Punjabi', bgcolor: 'bg-green-500' },
+    { id: 4, name: 'Tamil', bgcolor: 'bg-yellow-500' },
+    { id: 5, name: 'Telugu', bgcolor: 'bg-purple-500' },
+    { id: 6, name: 'Malayalam', bgcolor: 'bg-pink-500' },
+    { id: 7, name: 'Kannada', bgcolor: 'bg-indigo-500' },
+    { id: 8, name: 'Bengali', bgcolor: 'bg-orange-500' },
   ];
 
   const toggleLanguage = (languageId) => {
@@ -54,13 +54,8 @@ const ChooseSongLanguage = () => {
                 selectedLanguages.includes(language.id) 
                   ? 'ring-2 ring-green-500' 
                   : 'hover:ring-2 hover:ring-white'
-              }`}
+              } ${language.bgcolor}`}
             >
-              <img
-                src={language.imageUrl}
-                alt={language.name}
-                className="w-full h-full object-cover"
-              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4">
                 <span className="font-bold text-lg">
