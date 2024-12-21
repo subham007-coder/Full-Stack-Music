@@ -48,6 +48,29 @@ const Login = () => {
             Continue with Facebook
           </button>
 
+          {/* Additional Links to Other Pages */}
+          <div className="space-y-4">
+            {/* Create Account Link */}
+            <Link to="/create-account" className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center transition duration-200">
+              Create Account
+            </Link>
+
+            {/* Choose Artists Link */}
+            <Link to="/choose-artists" className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center transition duration-200">
+              Choose Artists
+            </Link>
+
+            {/* Choose Song Language Link */}
+            <Link to="/choose-language" className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center transition duration-200">
+              Choose Song Language
+            </Link>
+
+            {/* Home Link */}
+            <Link to="/home" className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center transition duration-200">
+              Home
+            </Link>
+          </div>
+
           {/* Login Link */}
           <div className="text-center">
             <span className="text-gray-400">Don't have an account?</span>
@@ -55,6 +78,7 @@ const Login = () => {
               Sign up
             </Link>
           </div>
+          
         </div>
       </div>
     </div>
