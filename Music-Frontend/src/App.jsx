@@ -4,6 +4,7 @@ import Login from './Components/Login';
 import CreateAccount from './Components/CreateAccount';
 import ChooseArtists from './Components/ChooseArtists';
 import ChooseSongLanguage from './Components/ChooseSongLanguage';
+import Home from './Components/Home';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/choose-artists" element={<ChooseArtists />} />
         <Route path="/choose-language" element={<ChooseSongLanguage />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
   );

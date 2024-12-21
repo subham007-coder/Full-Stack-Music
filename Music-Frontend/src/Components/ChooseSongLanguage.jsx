@@ -6,14 +6,14 @@ const ChooseSongLanguage = () => {
 
   // Example languages - replace with your actual language data
   const languages = [
-    { id: 1, name: 'Hindi', imageUrl: 'https://example.com/hindi.jpg', bgColor: 'bg-red-500' },
-    { id: 2, name: 'English', imageUrl: 'https://example.com/english.jpg', bgColor: 'bg-blue-500' },
-    { id: 3, name: 'Punjabi', imageUrl: 'https://example.com/punjabi.jpg', bgColor: 'bg-green-500' },
-    { id: 4, name: 'Tamil', imageUrl: 'https://example.com/tamil.jpg', bgColor: 'bg-yellow-500' },
-    { id: 5, name: 'Telugu', imageUrl: 'https://example.com/telugu.jpg', bgColor: 'bg-purple-500' },
-    { id: 6, name: 'Malayalam', imageUrl: 'https://example.com/malayalam.jpg', bgColor: 'bg-pink-500' },
-    { id: 7, name: 'Kannada', imageUrl: 'https://example.com/kannada.jpg', bgColor: 'bg-indigo-500' },
-    { id: 8, name: 'Bengali', imageUrl: 'https://example.com/bengali.jpg', bgColor: 'bg-orange-500' },
+    { id: 1, name: 'Hindi', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 2, name: 'English', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 3, name: 'Punjabi', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 4, name: 'Tamil', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 5, name: 'Telugu', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 6, name: 'Malayalam', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 7, name: 'Kannada', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
+    { id: 8, name: 'Bengali', imageUrl: 'https://i.pinimg.com/736x/cc/41/d5/cc41d575e8caf4f1ddb75955c6d4b241.jpg' },
   ];
 
   const toggleLanguage = (languageId) => {
@@ -50,12 +50,17 @@ const ChooseSongLanguage = () => {
             <button
               key={language.id}
               onClick={() => toggleLanguage(language.id)}
-              className={`relative aspect-square rounded-lg overflow-hidden transition-transform hover:scale-105 ${language.bgColor} ${
+              className={`relative aspect-square rounded-lg overflow-hidden transition-transform hover:scale-105 ${
                 selectedLanguages.includes(language.id) 
                   ? 'ring-2 ring-green-500' 
                   : 'hover:ring-2 hover:ring-white'
               }`}
             >
+              <img
+                src={language.imageUrl}
+                alt={language.name}
+                className="w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4">
                 <span className="font-bold text-lg">
