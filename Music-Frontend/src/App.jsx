@@ -10,7 +10,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* <Route path="/" element={<Navigate to="/login" />} /> */}
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/choose-artists" element={<ChooseArtists />} />
