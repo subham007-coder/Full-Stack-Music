@@ -13,8 +13,20 @@ function App() {
     <AudioProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* Authentication Routes */}
+          <Route path="/" element={<Login />} />
+          <Route path="/create-account" element={<CreateAccount />} />
+          
+          {/* Onboarding Routes */}
+          <Route path="/choose-artists" element={<ChooseArtists />} />
+          <Route path="/choose-language" element={<ChooseSongLanguage />} />
+          
+          {/* Main App Routes */}
+          <Route path="/home" element={<Home />} />
           <Route path="/player" element={<PlayerPage />} />
+          
+          {/* Redirect unknown paths to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </AudioProvider>
