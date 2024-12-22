@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 
@@ -14,11 +16,35 @@ const CreateAccount = () => {
     year: '',
     gender: ''
   });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:5000/api/auth/register', {
+        name: formData.name,
+        email: formData.email,
+        confirmEmail: formData.confirmEmail,
+        password: formData.password,
+        dateOfBirth: {
+          day: formData.day,
+          month: formData.month,
+          year: formData.year,
+        },
+        gender: formData.gender,
+      });
+      navigate('/login'); // Redirect to login after successful registration
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError("Registration failed. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center p-4">
@@ -35,7 +61,7 @@ const CreateAccount = () => {
           Create an account
         </h1>
 
-        <form className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-4">
           {/* Email */}
           <div className="space-y-1">
             <label className="text-sm font-medium">Email address</label>
