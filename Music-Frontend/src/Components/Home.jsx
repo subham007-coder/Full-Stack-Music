@@ -11,11 +11,13 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import { useAudio } from "../context/AudioContext";
+import axios from 'axios';
 
 const Home = () => {
   const [greeting, setGreeting] = useState("");
   const [activeCategory, setActiveCategory] = useState("For you");
   const [isFilterActive, setIsFilterActive] = useState(false);
+  const [songs, setSongs] = useState([]);
 
   // Categories data
   const categories = [
@@ -45,6 +47,19 @@ const Home = () => {
     // Update greeting every minute
     const interval = setInterval(updateGreeting, 60000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/songs');
+        setSongs(response.data);
+      } catch (error) {
+        console.error("Error fetching songs:", error);
+      }
+    };
+
+    fetchSongs();
   }, []);
 
   // Categories data with their respective playlists
