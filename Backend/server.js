@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const testRoute = require("./routes/testRoute");
 const songRoutes = require("./routes/songRoutes");
 const playlistRoutes = require("./routes/playlistRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 connectDB();
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/songs", songRoutes);
 app.use("/api/test", testRoute);
 app.use("/api/playlists", playlistRoutes);
+app.use("/api/users", userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
