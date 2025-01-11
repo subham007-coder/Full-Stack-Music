@@ -28,22 +28,21 @@ router.post("/register", async (req, res) => {
     // Generate a unique seed based on the user's name
     const seed = md5(name + Math.random());
 
-    // Set avatar parameters based on gender
-    let topType, hairColor, facialHairType, clotheColor;
+     // Set avatar parameters based on gender
+     let topType, hairColor, facialHairType, clotheColor;
 
-    if (gender === "Male") {
-      topType = "ShortHairShortFlat"; // Male hairstyle
-      hairColor = "Black"; // Black hair
-      facialHairType = "BeardLight"; // Male facial hair
-      clotheColor = "Blue03"; // Male clothing color
-      // skinColor = 'Light'; // Valid DiceBear skin color
-    } else {
-      topType = "LongHairStraight"; // Female hairstyle
-      hairColor = "Brown"; // Brown hair
-      facialHairType = "Blank"; // No facial hair
-      clotheColor = "Pink"; // Female clothing color
-      //skinColor = 'Pale'; // Valid DiceBear skin color
-    }
+     if (gender === 'Male') {
+         topType = 'ShortHairShortFlat'; // Male hairstyle
+         hairColor = '000000'; // Black
+         facialHairType = 'BeardLight'; // Male facial hair
+         clotheColor = 'Blue03'; // Male clothing color
+     } else {
+         topType = 'LongHairStraight'; // Female hairstyle
+         hairColor = 'ff69b4';
+         facialHairType = 'Blank'; // No facial hair
+         clotheColor = 'Pink'; // Female clothing color
+         // skinColor = '#f1c27d';
+     }
 
     const skinColor = "f1c27d"; // Use hex code without the # character
 
