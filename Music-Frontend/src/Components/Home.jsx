@@ -9,7 +9,7 @@ import {
 } from "react-icons/io5";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { gsap } from "gsap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAudio } from "../context/AudioContext";
 import axios from 'axios';
 
@@ -316,6 +316,17 @@ const Home = () => {
     });
   };
 
+  const handleSettingsClick = () => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    
+    if (token && userId) {
+      navigate('/settings');
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="flex-1 bg-gradient-to-b from-zinc-900 to-black overflow-y-auto pb-24">
@@ -331,7 +342,7 @@ const Home = () => {
                 <button className="text-white">
                   <IoTimeOutline className="text-2xl" />
                 </button>
-                <button className="text-white">
+                <button className="text-white" onClick={handleSettingsClick}>
                   <IoSettingsSharp className="text-2xl" />
                 </button>
               </div>

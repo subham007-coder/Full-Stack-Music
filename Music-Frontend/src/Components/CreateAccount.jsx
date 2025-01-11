@@ -8,7 +8,7 @@ const CreateAccount = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
-    confirmEmail: '',
+    confirmEmail: '', // Ensure this field is included
     password: '',
     name: '',
     day: '',
@@ -30,7 +30,7 @@ const CreateAccount = () => {
       await axios.post('http://localhost:5000/api/auth/register', {
         name: formData.name,
         email: formData.email,
-        confirmEmail: formData.confirmEmail,
+        confirmEmail: formData.confirmEmail, // Include confirmEmail in the request
         password: formData.password,
         dateOfBirth: {
           day: formData.day,
@@ -39,7 +39,7 @@ const CreateAccount = () => {
         },
         gender: formData.gender,
       });
-      navigate('/login'); // Redirect to login after successful registration
+      navigate('/verify-otp'); // Redirect to OTP verification page
     } catch (error) {
       console.error("Registration error:", error);
       setError("Registration failed. Please try again.");

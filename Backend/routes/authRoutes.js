@@ -40,11 +40,11 @@ router.post("/register", async (req, res) => {
         hairColor = 'ff69b4';
         facialHairType = 'Blank'; // No facial hair
         clotheColor = 'Pink'; // Female clothing color
-        skinColor = '#f1c27d';
+        // skinColor = '#f1c27d';
     }
 
     
-    //const skinColor = '#f1c27d'; // Example hex code for a light skin tone
+    const skinColor = '#f1c27d'; // Example hex code for a light skin tone
 
     const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
 

@@ -1,29 +1,76 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { HiSearch } from 'react-icons/hi';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { HiSearch } from "react-icons/hi";
+import { useUserData } from "../context/UserDataContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ChooseArtists = () => {
-  const [selectedArtists, setSelectedArtists] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const { selectedArtists, setSelectedArtists } = useUserData();
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleNext = async () => {
+    try {
+      const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
+      console.log("Retrieved User ID:", userId); // Log the retrieved user ID
+      if (!userId) {
+        throw new Error("User ID not found in local storage."); // Handle case where userId is not found
+      }
+      // Extract artist names from selectedArtists
+      const artistNames = selectedArtists.map(
+        (artistId) => artists.find((artist) => artist.id === artistId).name
+      );
+      await axios.put(
+        `http://localhost:5000/api/users/update-preferences/${userId}`,
+        {
+          preferredArtists: artistNames, // Send artist names to backend
+        }
+      );
+      navigate("/choose-song-language"); // Navigate to ChooseSongLanguage after updating
+    } catch (error) {
+      console.error("Error updating preferences:", error);
+    }
+  };
 
   // Example artists data - replace with your actual data
   const artists = [
-    { id: 1, name: 'Taylor Swift', imageUrl: 'https://i.scdn.co/image/ab6761610000e5eb5a00969a4698c3132a15fbb0' },
-    { id: 2, name: 'Ed Sheeran', imageUrl: 'https://i.scdn.co/image/ab6761610000e5eb12a2ef08d00dd7451a6dbed6' },
-    { id: 3, name: 'Drake', imageUrl: 'https://i.scdn.co/image/ab6761610000e5eb4293385d324db8558179afd9' },
-    { id: 4, name: 'The Weeknd', imageUrl: 'https://i.scdn.co/image/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb' },
+    {
+      id: 1,
+      name: "Taylor Swift",
+      imageUrl:
+        "https://i.scdn.co/image/ab6761610000e5eb5a00969a4698c3132a15fbb0",
+    },
+    {
+      id: 2,
+      name: "Ed Sheeran",
+      imageUrl:
+        "https://i.scdn.co/image/ab6761610000e5eb12a2ef08d00dd7451a6dbed6",
+    },
+    {
+      id: 3,
+      name: "Drake",
+      imageUrl:
+        "https://i.scdn.co/image/ab6761610000e5eb4293385d324db8558179afd9",
+    },
+    {
+      id: 4,
+      name: "The Weeknd",
+      imageUrl:
+        "https://i.scdn.co/image/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb",
+    },
     // Add more artists as needed
   ];
 
   const toggleArtist = (artistId) => {
-    setSelectedArtists(prev => 
+    setSelectedArtists((prev) =>
       prev.includes(artistId)
-        ? prev.filter(id => id !== artistId)
+        ? prev.filter((id) => id !== artistId)
         : [...prev, artistId]
     );
   };
 
-  const filteredArtists = artists.filter(artist =>
+  const filteredArtists = artists.filter((artist) =>
     artist.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -33,13 +80,13 @@ const ChooseArtists = () => {
       <div className="max-w-3xl mx-auto">
         {/* Centered Logo */}
         <div className="flex justify-center mb-4">
-          <img 
+          <img
             src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Black.png"
             alt="Spotify Logo"
             className="w-24 invert"
           />
         </div>
-        
+
         <h1 className="text-2xl font-bold mb-2 text-center">
           Choose more artists you like
         </h1>
@@ -66,7 +113,9 @@ const ChooseArtists = () => {
               key={artist.id}
               onClick={() => toggleArtist(artist.id)}
               className={`relative aspect-square rounded-lg overflow-hidden group ${
-                selectedArtists.includes(artist.id) ? 'ring-2 ring-green-500' : ''
+                selectedArtists.includes(artist.id)
+                  ? "ring-2 ring-green-500"
+                  : ""
               }`}
             >
               <img
@@ -92,11 +141,12 @@ const ChooseArtists = () => {
         <div className="p-4 bg-gradient-to-t from-black to-transparent">
           <div className="max-w-3xl mx-auto">
             <button
+              onClick={handleNext}
               disabled={selectedArtists.length < 3}
               className={`w-full py-3 rounded-full font-bold ${
                 selectedArtists.length >= 3
-                  ? 'bg-green-500 hover:bg-green-600'
-                  : 'bg-gray-700 cursor-not-allowed'
+                  ? "bg-green-500 hover:bg-green-600"
+                  : "bg-gray-700 cursor-not-allowed"
               }`}
             >
               Next

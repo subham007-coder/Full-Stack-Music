@@ -47,16 +47,16 @@ const Login = () => {
 
         {/* Login Buttons */}
         <div className="space-y-4">
-          {/* Sign up Button */}
-          <button className="w-full bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-full font-semibold transition duration-200">
-            Sign up free
-          </button>
+          {/* login Button */}
+          <Link to="/login" className="w-full bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-full font-semibold transition duration-200 flex items-center justify-center">
+            Login
+          </Link>
 
           {/* Phone Number Button */}
-          <button className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center gap-2 transition duration-200">
+          {/* <button className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center gap-2 transition duration-200">
             <HiPhone className="text-xl" />
             Continue with phone number
-          </button>
+          </button> */}
 
           {/* Google Button */}
           <button className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center gap-2 transition duration-200">
