@@ -32,19 +32,19 @@ router.post("/register", async (req, res) => {
 
     if (gender === 'Male') {
         topType = 'ShortHairShortFlat'; // Male hairstyle
-        hairColor = '000000'; // Black
+        hairColor = 'Black'; // Black
         facialHairType = 'BeardLight'; // Male facial hair
         clotheColor = 'Blue03'; // Male clothing color
     } else {
         topType = 'LongHairStraight'; // Female hairstyle
-        hairColor = 'ff69b4';
+        hairColor = 'Brown'; // Brown
         facialHairType = 'Blank'; // No facial hair
         clotheColor = 'Pink'; // Female clothing color
     }
 
-    const skinColor = '%23f1c27d'; // Example hex code for a light skin tone, encoded
+    const skinColor = 'f1c27d'; // Example hex code for a light skin tone
 
-    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
+    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=%23${skinColor}`;
 
     // Create user
     const user = await User.create({
