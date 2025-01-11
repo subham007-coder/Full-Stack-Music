@@ -42,7 +42,7 @@ router.post("/register", async (req, res) => {
         clotheColor = 'Pink'; // Female clothing color
     }
 
-    const skinColor = 'Light'; // Use color name instead of hex code
+    const skinColor = 'f1c27d'; // Use hex code without the # character
 
     const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
 
