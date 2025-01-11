@@ -36,7 +36,7 @@ const ChooseSongLanguage = () => {
         .filter((language) => selectedLanguages.includes(language.id))
         .map((language) => language.name); // Extract language names
       await axios.put(
-        `http://localhost:5000/api/users/update-preferences/${userId}`,
+        `https://full-stack-music-backend.onrender.com/api/users/update-preferences/${userId}`,
         {
           preferredLanguages: languageNames, // Send language names to backend
         }

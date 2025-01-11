@@ -52,7 +52,7 @@ const Home = () => {
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/songs');
+        const response = await axios.get('https://full-stack-music-backend.onrender.com/api/songs');
         setSongs(response.data);
       } catch (error) {
         console.error("Error fetching songs:", error);

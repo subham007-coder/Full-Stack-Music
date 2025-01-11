@@ -27,7 +27,7 @@ const CreateAccount = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', {
+      await axios.post('https://full-stack-music-backend.onrender.com/api/auth/register', {
         name: formData.name,
         email: formData.email,
         confirmEmail: formData.confirmEmail, // Include confirmEmail in the request

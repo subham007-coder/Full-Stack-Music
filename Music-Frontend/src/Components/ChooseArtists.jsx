@@ -22,7 +22,7 @@ const ChooseArtists = () => {
         (artistId) => artists.find((artist) => artist.id === artistId).name
       );
       await axios.put(
-        `http://localhost:5000/api/users/update-preferences/${userId}`,
+        `https://full-stack-music-backend.onrender.com/api/users/update-preferences/${userId}`,
         {
           preferredArtists: artistNames, // Send artist names to backend
         }

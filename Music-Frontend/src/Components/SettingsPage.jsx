@@ -29,7 +29,7 @@ const SettingsPage = () => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+        const response = await axios.get(`https://full-stack-music-backend.onrender.com/api/users/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

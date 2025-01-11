@@ -31,7 +31,7 @@ const VerifyOTP = () => {
     const otpString = otp.join('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/verify-otp', {
+      const response = await axios.post('https://full-stack-music-backend.onrender.com/api/auth/verify-otp', {
         otp: otpString
       });
 
