@@ -14,7 +14,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://music-sigma-drab.vercel.app'],
+  origin: ['http://localhost:5173', 'https://full-stack-music.vercel.app'],
   credentials: true
 }));
 app.use(express.json());
