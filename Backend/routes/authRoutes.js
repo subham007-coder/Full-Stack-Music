@@ -28,21 +28,24 @@ router.post("/register", async (req, res) => {
     const seed = md5(name + Math.random());
 
     // Set avatar parameters based on gender
-    let topType, hairColor, facialHairType, clotheColor;
+    let topType, hairColor, facialHairType, clotheColor, skinColor;
 
     if (gender === 'Male') {
-        topType = 'ShortHairShortFlat'; // Male hairstyle
-        hairColor = 'Black'; // Black
-        facialHairType = 'BeardLight'; // Male facial hair
-        clotheColor = 'Blue03'; // Male clothing color
+      topType = 'ShortHairShortFlat'; // Male hairstyle
+      hairColor = 'Black'; // Black hair
+      facialHairType = 'BeardLight'; // Male facial hair
+      clotheColor = 'Blue03'; // Male clothing color
+      skinColor = 'Light'; // Valid DiceBear skin color
     } else {
-        topType = 'LongHairStraight'; // Female hairstyle
-        hairColor = 'Brown'; // Brown
-        facialHairType = 'Blank'; // No facial hair
-        clotheColor = 'Pink'; // Female clothing color
+      topType = 'LongHairStraight'; // Female hairstyle
+      hairColor = 'Brown'; // Brown hair
+      facialHairType = 'Blank'; // No facial hair
+      clotheColor = 'Pink'; // Female clothing color
+      skinColor = 'Pale'; // Valid DiceBear skin color
     }
+    
 
-    const skinColor = 'f1c27d'; // Use hex code without the # character
+    // const skinColor = 'f1c27d'; // Use hex code without the # character
 
     const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
 
