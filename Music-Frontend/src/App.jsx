@@ -7,7 +7,7 @@ import VerifyOTP from "./Components/VerifyOTP";
 import ChooseArtists from "./Components/ChooseArtists";
 import ChooseSongLanguage from "./Components/ChooseSongLanguage";
 import CreateAccount from "./Components/CreateAccount";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./Components/ProtectedRoute";
 import { AudioProvider } from "./context/AudioContext";
 import { UserDataProvider } from "./context/UserDataContext";
 import Login from "./Components/Login";
