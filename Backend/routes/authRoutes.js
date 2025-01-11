@@ -42,9 +42,9 @@ router.post("/register", async (req, res) => {
         clotheColor = 'Pink'; // Female clothing color
     }
 
-    const skinColor = 'f1c27d'; // Example hex code for a light skin tone
+    const skinColor = 'Light'; // Use color name instead of hex code
 
-    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=%23${skinColor}`;
+    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
 
     // Create user
     const user = await User.create({
