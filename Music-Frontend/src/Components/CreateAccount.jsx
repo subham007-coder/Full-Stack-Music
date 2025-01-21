@@ -39,6 +39,7 @@ const CreateAccount = () => {
         },
         gender: formData.gender,
       });
+      localStorage.setItem('email', formData.email); // Store email in localStorage
       navigate('/verify-otp'); // Redirect to OTP verification page
     } catch (error) {
       console.error("Registration error:", error);

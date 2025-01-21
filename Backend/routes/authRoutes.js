@@ -4,9 +4,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { protect } = require("../middleware/authMiddleware");
-const { sendVerificationEmail } = require("../utils/emailService");
-const crypto = require("crypto");
-const md5 = require("md5");
+const { sendVerificationEmail } = require('../utils/emailService');
+const crypto = require('crypto');
+const md5 = require('md5');
 
 // Register user
 router.post("/register", async (req, res) => {
@@ -117,9 +117,9 @@ router.post("/login", async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({
-      message: "Login failed",
-      error: error.message,
+    res.status(500).json({ 
+      message: "Login failed", 
+      error: error.message 
     });
   }
 });
@@ -133,7 +133,7 @@ router.put("/preferences", protect, async (req, res) => {
     if (user) {
       if (preferredArtists) user.preferredArtists = preferredArtists;
       if (preferredLanguages) user.preferredLanguages = preferredLanguages;
-
+      
       const updatedUser = await user.save();
       res.json({
         _id: updatedUser._id,
@@ -146,9 +146,9 @@ router.put("/preferences", protect, async (req, res) => {
     }
   } catch (error) {
     console.error("Update preferences error:", error);
-    res.status(500).json({
-      message: "Failed to update preferences",
-      error: error.message,
+    res.status(500).json({ 
+      message: "Failed to update preferences", 
+      error: error.message 
     });
   }
 });
@@ -172,9 +172,9 @@ router.get("/profile", protect, async (req, res) => {
     }
   } catch (error) {
     console.error("Get profile error:", error);
-    res.status(500).json({
-      message: "Failed to get profile",
-      error: error.message,
+    res.status(500).json({ 
+      message: "Failed to get profile", 
+      error: error.message 
     });
   }
 });
@@ -186,17 +186,17 @@ router.get("/verify-email", async (req, res) => {
   try {
     const user = await User.findOne({ verificationToken: token });
     if (!user) {
-      return res.redirect("/verification-feedback?message=Invalid token");
+      return res.redirect('/verification-feedback?message=Invalid token');
     }
 
     user.isVerified = true; // Mark user as verified
     user.verificationToken = undefined; // Clear the token
     await user.save();
 
-    res.redirect("/verification-feedback?message=Email verified successfully!");
+    res.redirect('/verification-feedback?message=Email verified successfully!');
   } catch (error) {
     console.error("Email verification error:", error);
-    res.redirect("/verification-feedback?message=Email verification failed");
+    res.redirect('/verification-feedback?message=Email verification failed');
   }
 });
 
@@ -229,17 +229,43 @@ router.post("/verify-otp", async (req, res) => {
       expiresIn: "30d",
     });
 
-    res.status(200).json({
-      message: "Email verified successfully!",
+    res.status(200).json({ 
+      message: "Email verified successfully!", 
       userId: user._id,
-      token: token,
+      token: token
     });
   } catch (error) {
     console.error("OTP verification error:", error);
-    res
-      .status(500)
-      .json({ message: "OTP verification failed", error: error.message });
+    res.status(500).json({ message: "OTP verification failed", error: error.message });
   }
 });
+
+// Resend OTP
+router.post("/resend-otp", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Find user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate a new 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.verificationToken = otp; // Store new OTP in the user document
+    await user.save();
+
+    // Send new OTP via email
+    await sendVerificationEmail(email, otp);
+
+    res.status(200).json({ message: "OTP resent successfully" });
+  } catch (error) {
+    console.error("Error resending OTP:", error);
+    res.status(500).json({ message: "Failed to resend OTP", error: error.message });
+  }
+});
+
 
 module.exports = router;
