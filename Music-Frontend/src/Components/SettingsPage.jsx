@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoPersonOutline } from 'react-icons/io5';
 import { FiLogOut } from 'react-icons/fi';
+import { FaBirthdayCake } from 'react-icons/fa';  // Import the birthday icon
 import axios from 'axios';
 
 const SettingsPage = () => {
@@ -116,7 +117,7 @@ const SettingsPage = () => {
             </div>
             <div className="w-full px-4 py-4 flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <IoPersonOutline className="text-xl" />
+                <FaBirthdayCake className="text-xl" /> {/* Add birthday cake icon */}
                 <div>
                   <span className="block">Date of Birth</span>
                   <span className="text-sm text-gray-400">{userData.dateOfBirth}</span>
