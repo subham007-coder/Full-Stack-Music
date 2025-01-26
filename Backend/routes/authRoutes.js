@@ -24,10 +24,20 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    const seed = crypto.randomBytes(16).toString("hex"); // Generate a unique and consistent seed
+    // Generate unique seed for avatar
+    const seed = crypto.randomBytes(16).toString("hex");
 
-    // Generate avatar URL using Adorable Avatars
-    const avatarUrl = `https://api.adorable.io/avatars/285/${seed}.png`;
+    // Set avatar parameters based on gender
+    let style;
+    if (gender === "Male") {
+      style = "adventurer"; // Male avatar style
+    } else if (gender === "Female") {
+      style = "adventurer-neutral"; // Female avatar style
+    } else {
+      style = "micah"; // Neutral style for non-binary or undefined genders
+    }
+
+    const avatarUrl = `https://api.dicebear.com/6.x/${style}/svg?seed=${seed}`;
 
     // Create user
     const user = await User.create({
@@ -49,9 +59,9 @@ router.post("/register", async (req, res) => {
     // Send OTP via email
     await sendVerificationEmail(email, otp);
 
-    // Redirect to OTP verification page
     res.status(200).json({
       message: "Registration successful. Please check your email for the OTP.",
+      avatarUrl,
     });
   } catch (error) {
     console.error("Registration error:", error);
