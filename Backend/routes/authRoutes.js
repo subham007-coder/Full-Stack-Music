@@ -4,9 +4,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { protect } = require("../middleware/authMiddleware");
-const { sendVerificationEmail } = require('../utils/emailService');
-const crypto = require('crypto');
-const md5 = require('md5');
+const { sendVerificationEmail } = require("../utils/emailService");
+const crypto = require("crypto");
+const md5 = require("md5");
 
 // Register user
 router.post("/register", async (req, res) => {
@@ -27,31 +27,31 @@ router.post("/register", async (req, res) => {
 
     const seed = crypto.randomBytes(16).toString("hex"); // Generate a unique and consistent seed
 
-// Set avatar parameters based on gender
-let topType, hairColor, facialHairType, clotheColor;
+    // Set avatar parameters based on gender
+    let topType, hairColor, facialHairType, clotheColor;
 
-if (gender === "Male") {
-  topType = "ShortHairShortFlat"; // Male hairstyle
-  hairColor = "Black"; // Hair color
-  facialHairType = "BeardLight"; // Male facial hair
-  clotheColor = "Blue03"; // Male clothing
-} else if (gender === "Female") {
-  topType = "LongHairStraight"; // Female hairstyle
-  hairColor = "Brown"; // Female hair color
-  facialHairType = "Blank"; // No facial hair for female
-  clotheColor = "Pink"; // Female clothing
-} else {
-  // Handle non-binary or undefined genders (optional)
-  topType = "ShortHairFrizzle";
-  hairColor = "BrownDark";
-  facialHairType = "Blank";
-  clotheColor = "Gray02";
-}
+    if (gender === "Male") {
+      topType = "ShortHairShortFlat"; // Male hairstyle
+      hairColor = "Black"; // Hair color
+      facialHairType = "BeardLight"; // Male facial hair
+      clotheColor = "Blue03"; // Male clothing
+    } else if (gender === "Female") {
+      topType = "LongHairStraight"; // Female hairstyle
+      hairColor = "Brown"; // Female hair color
+      facialHairType = "Blank"; // No facial hair for female
+      clotheColor = "Pink"; // Female clothing
+    } else {
+      // Handle non-binary or undefined genders (optional)
+      topType = "ShortHairFrizzle";
+      hairColor = "BrownDark";
+      facialHairType = "Blank";
+      clotheColor = "Gray02";
+    }
 
-const skinColor = "f1c27d"; // Use hex code for skin tone
+    const skinColor = "f1c27d"; // Use hex code for skin tone
 
-// Generate avatar URL
-const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
+    // Generate avatar URL
+    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
 
     // Create user
     const user = await User.create({
@@ -74,12 +74,9 @@ const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topTy
     await sendVerificationEmail(email, otp);
 
     // Redirect to OTP verification page
-    res
-      .status(200)
-      .json({
-        message:
-          "Registration successful. Please check your email for the OTP.",
-      });
+    res.status(200).json({
+      message: "Registration successful. Please check your email for the OTP.",
+    });
   } catch (error) {
     console.error("Registration error:", error);
     res
@@ -122,9 +119,9 @@ router.post("/login", async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ 
-      message: "Login failed", 
-      error: error.message 
+    res.status(500).json({
+      message: "Login failed",
+      error: error.message,
     });
   }
 });
@@ -138,7 +135,7 @@ router.put("/preferences", protect, async (req, res) => {
     if (user) {
       if (preferredArtists) user.preferredArtists = preferredArtists;
       if (preferredLanguages) user.preferredLanguages = preferredLanguages;
-      
+
       const updatedUser = await user.save();
       res.json({
         _id: updatedUser._id,
@@ -151,9 +148,9 @@ router.put("/preferences", protect, async (req, res) => {
     }
   } catch (error) {
     console.error("Update preferences error:", error);
-    res.status(500).json({ 
-      message: "Failed to update preferences", 
-      error: error.message 
+    res.status(500).json({
+      message: "Failed to update preferences",
+      error: error.message,
     });
   }
 });
@@ -177,9 +174,9 @@ router.get("/profile", protect, async (req, res) => {
     }
   } catch (error) {
     console.error("Get profile error:", error);
-    res.status(500).json({ 
-      message: "Failed to get profile", 
-      error: error.message 
+    res.status(500).json({
+      message: "Failed to get profile",
+      error: error.message,
     });
   }
 });
@@ -191,17 +188,17 @@ router.get("/verify-email", async (req, res) => {
   try {
     const user = await User.findOne({ verificationToken: token });
     if (!user) {
-      return res.redirect('/verification-feedback?message=Invalid token');
+      return res.redirect("/verification-feedback?message=Invalid token");
     }
 
     user.isVerified = true; // Mark user as verified
     user.verificationToken = undefined; // Clear the token
     await user.save();
 
-    res.redirect('/verification-feedback?message=Email verified successfully!');
+    res.redirect("/verification-feedback?message=Email verified successfully!");
   } catch (error) {
     console.error("Email verification error:", error);
-    res.redirect('/verification-feedback?message=Email verification failed');
+    res.redirect("/verification-feedback?message=Email verification failed");
   }
 });
 
@@ -234,14 +231,16 @@ router.post("/verify-otp", async (req, res) => {
       expiresIn: "30d",
     });
 
-    res.status(200).json({ 
-      message: "Email verified successfully!", 
+    res.status(200).json({
+      message: "Email verified successfully!",
       userId: user._id,
-      token: token
+      token: token,
     });
   } catch (error) {
     console.error("OTP verification error:", error);
-    res.status(500).json({ message: "OTP verification failed", error: error.message });
+    res
+      .status(500)
+      .json({ message: "OTP verification failed", error: error.message });
   }
 });
 
@@ -268,9 +267,10 @@ router.post("/resend-otp", async (req, res) => {
     res.status(200).json({ message: "OTP resent successfully" });
   } catch (error) {
     console.error("Error resending OTP:", error);
-    res.status(500).json({ message: "Failed to resend OTP", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to resend OTP", error: error.message });
   }
 });
-
 
 module.exports = router;
