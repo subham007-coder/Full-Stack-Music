@@ -11,8 +11,7 @@ const md5 = require("md5");
 // Register user
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, confirmEmail, password, dateOfBirth, gender } =
-      req.body;
+    const { name, email, confirmEmail, password, dateOfBirth, gender } = req.body;
 
     // Check if email and confirmEmail match
     if (email !== confirmEmail) {
@@ -27,31 +26,8 @@ router.post("/register", async (req, res) => {
 
     const seed = crypto.randomBytes(16).toString("hex"); // Generate a unique and consistent seed
 
-    // Set avatar parameters based on gender
-    let topType, hairColor, facialHairType, clotheColor;
-
-    if (gender === "Male") {
-      topType = "ShortHairShortFlat"; // Male hairstyle
-      hairColor = "Black"; // Predefined color name
-      facialHairType = "BeardLight"; // Male facial hair
-      clotheColor = "Blue03"; // Male clothing
-    } else if (gender === "Female") {
-      topType = "LongHairStraight"; // Female hairstyle
-      hairColor = "Brown"; // Female hair color
-      facialHairType = "Blank"; // No facial hair for female
-      clotheColor = "Pink"; // Female clothing
-    } else {
-      // Handle non-binary or undefined genders (optional)
-      topType = "ShortHairFrizzle";
-      hairColor = "BrownDark";
-      facialHairType = "Blank";
-      clotheColor = "Gray02";
-    }
-
-    const skinColor = "#f1c27d"; // Hex code with # prefix
-
-    // Generate avatar URL
-    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
+    // Generate avatar URL using Adorable Avatars
+    const avatarUrl = `https://api.adorable.io/avatars/285/${seed}.png`;
 
     // Create user
     const user = await User.create({
@@ -79,9 +55,7 @@ router.post("/register", async (req, res) => {
     });
   } catch (error) {
     console.error("Registration error:", error);
-    res
-      .status(500)
-      .json({ message: "Registration failed", error: error.message });
+    res.status(500).json({ message: "Registration failed", error: error.message });
   }
 });
 
