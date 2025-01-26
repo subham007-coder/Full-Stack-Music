@@ -25,28 +25,33 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    // Generate a unique seed based on the user's name
-    const seed = md5(name + Math.random());
+    const seed = crypto.randomBytes(16).toString("hex"); // Generate a unique and consistent seed
 
-     // Set avatar parameters based on gender
-     let topType, hairColor, facialHairType, clotheColor;
+// Set avatar parameters based on gender
+let topType, hairColor, facialHairType, clotheColor;
 
-     if (gender === 'Male') {
-         topType = 'ShortHairShortFlat'; // Male hairstyle
-         hairColor = '000000'; // Black
-         facialHairType = 'BeardLight'; // Male facial hair
-         clotheColor = 'Blue03'; // Male clothing color
-     } else {
-         topType = 'LongHairStraight'; // Female hairstyle
-         hairColor = 'ff69b4';
-         facialHairType = 'Blank'; // No facial hair
-         clotheColor = 'Pink'; // Female clothing color
-         // skinColor = '#f1c27d';
-     }
+if (gender === "Male") {
+  topType = "ShortHairShortFlat"; // Male hairstyle
+  hairColor = "Black"; // Hair color
+  facialHairType = "BeardLight"; // Male facial hair
+  clotheColor = "Blue03"; // Male clothing
+} else if (gender === "Female") {
+  topType = "LongHairStraight"; // Female hairstyle
+  hairColor = "Brown"; // Female hair color
+  facialHairType = "Blank"; // No facial hair for female
+  clotheColor = "Pink"; // Female clothing
+} else {
+  // Handle non-binary or undefined genders (optional)
+  topType = "ShortHairFrizzle";
+  hairColor = "BrownDark";
+  facialHairType = "Blank";
+  clotheColor = "Gray02";
+}
 
-    const skinColor = "f1c27d"; // Use hex code without the # character
+const skinColor = "f1c27d"; // Use hex code for skin tone
 
-    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
+// Generate avatar URL
+const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
 
     // Create user
     const user = await User.create({
