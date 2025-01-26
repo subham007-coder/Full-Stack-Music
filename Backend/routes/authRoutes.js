@@ -32,7 +32,7 @@ router.post("/register", async (req, res) => {
 
     if (gender === "Male") {
       topType = "ShortHairShortFlat"; // Male hairstyle
-      hairColor = "Black"; // Hair color
+      hairColor = "Black"; // Predefined color name
       facialHairType = "BeardLight"; // Male facial hair
       clotheColor = "Blue03"; // Male clothing
     } else if (gender === "Female") {
@@ -48,7 +48,7 @@ router.post("/register", async (req, res) => {
       clotheColor = "Gray02";
     }
 
-    const skinColor = "f1c27d"; // Use hex code for skin tone
+    const skinColor = "#f1c27d"; // Hex code with # prefix
 
     // Generate avatar URL
     const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&topType=${topType}&accessoriesType=Blank&hairColor=${hairColor}&facialHairType=${facialHairType}&clotheType=BlazerShirt&clotheColor=${clotheColor}&eyeType=Default&eyebrowType=Default&mouthType=Smile&skinColor=${skinColor}`;
