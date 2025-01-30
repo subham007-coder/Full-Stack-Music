@@ -63,7 +63,7 @@ const CreateAccount = () => {
         return;
       }
 
-      // Format the data
+      // Format the data - remove confirmEmail since it's not needed in the database
       const formattedData = {
         name: formData.name,
         email: formData.email,
@@ -76,19 +76,40 @@ const CreateAccount = () => {
         }
       };
 
+      console.log('Sending registration data:', formattedData); // Debug log
+
       // Make the API call
       const response = await axios.post(
         'https://full-stack-music-backend.onrender.com/api/auth/register',
-        formattedData
+        formattedData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
       );
       
+      console.log('Registration response:', response.data); // Debug log
+
       if (response.data) {
         localStorage.setItem('email', formData.email);
         navigate('/verify-otp');
       }
     } catch (error) {
       console.error("Registration error:", error);
-      setError(error.response?.data?.message || "Registration failed. Please try again.");
+      if (error.response) {
+        // Log detailed error information
+        console.error("Error response:", error.response.data);
+        setError(error.response.data.message || "Registration failed. Please try again.");
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("No response received:", error.request);
+        setError("Network error. Please check your connection.");
+      } else {
+        // Error in request setup
+        console.error("Request setup error:", error.message);
+        setError("An error occurred. Please try again.");
+      }
     }
   };
 
@@ -247,6 +268,7 @@ const CreateAccount = () => {
           {/* Submit Button */}
           <button
             type="submit"
+            onClick={() => console.log('Form submitted')}
             className="w-full bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-4 rounded-full mt-6"
           >
             Create account
