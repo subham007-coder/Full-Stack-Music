@@ -47,6 +47,7 @@ const SettingsPage = () => {
   // Function to generate and set new avatar
   const generateNewAvatar = async (style) => {
     try {
+      console.log('Generating new avatar with style:', style); // Debug log
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
       
@@ -60,6 +61,8 @@ const SettingsPage = () => {
         }
       );
 
+      console.log('Avatar response:', response.data); // Debug log
+
       if (response.data.avatarUrl) {
         setUserData(prev => ({
           ...prev,
@@ -69,6 +72,8 @@ const SettingsPage = () => {
       }
     } catch (error) {
       console.error('Error generating new avatar:', error);
+      // Show error to user
+      alert('Failed to update avatar. Please try again.');
     }
   };
 
@@ -162,7 +167,7 @@ const SettingsPage = () => {
       {/* Avatar Selection Modal */}
       {showAvatarModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-          <div className="bg-zinc-900 rounded-lg w-full max-w-lg max-h-[80vh] overflow-y-auto">
+          <div className="bg-zinc-900 rounded-lg w-full max-w-md">
             <div className="p-4 border-b border-zinc-800 flex justify-between items-center">
               <h3 className="text-lg font-semibold">Choose Avatar Style</h3>
               <button 
@@ -173,26 +178,28 @@ const SettingsPage = () => {
               </button>
             </div>
             
-            <div className="p-4 space-y-4">
-              {avatarStyles.map((style) => (
-                <div key={style.id} className="space-y-2">
-                  <h4 className="font-medium text-gray-300">{style.name}</h4>
-                  <div className="grid grid-cols-4 gap-2">
-                    {style.preview.map((url, index) => (
-                      <button
-                        key={index}
-                        onClick={() => generateNewAvatar(style.id)}
-                        className="aspect-square rounded-lg overflow-hidden bg-zinc-800 hover:ring-2 hover:ring-green-500 transition-all"
-                      >
-                        <img
-                          src={url}
-                          alt={`${style.name} preview ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </button>
-                    ))}
+            <div className="p-4">
+              {[
+                { id: 'adventurer', name: 'Adventurer' },
+                { id: 'adventurer-neutral', name: 'Adventurer Neutral' },
+                { id: 'micah', name: 'Micah' },
+                { id: 'pixel-art', name: 'Pixel Art' },
+                { id: 'bottts', name: 'Robots' }
+              ].map((style) => (
+                <button
+                  key={style.id}
+                  onClick={() => generateNewAvatar(style.id)}
+                  className="w-full text-left px-4 py-3 hover:bg-zinc-800 flex items-center justify-between rounded-lg mb-2"
+                >
+                  <span>{style.name}</span>
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-800">
+                    <img
+                      src={`https://api.dicebear.com/6.x/${style.id}/svg?seed=${userData.email}`}
+                      alt={style.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
