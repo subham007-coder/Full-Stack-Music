@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
@@ -24,92 +24,18 @@ const CreateAccount = () => {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    const user = localStorage.getItem('user');
-
-    if (token && userId && user) {
-      const userData = JSON.parse(user);
-      if (userData.token === token) {
-        navigate('/home');
-      }
-    }
-  }, [navigate]);
-
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // Validate required fields
-      if (!formData.day || !formData.month || !formData.year) {
-        setError("Please fill in all date of birth fields");
-        return;
-      }
-
-      if (!formData.name || !formData.email || !formData.password || !formData.gender) {
-        setError("Please fill in all required fields");
-        return;
-      }
-
-      // Email validation
-      if (formData.email !== formData.confirmEmail) {
-        setError("Email addresses do not match");
-        return;
-      }
-
-      // Password validation
-      if (formData.password.length < 6) {
-        setError("Password must be at least 6 characters long");
-        return;
-      }
-
-      // Format the data - remove confirmEmail since it's not needed in the database
-      const formattedData = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        gender: formData.gender,
-        dateOfBirth: {
-          day: formData.day.trim(),
-          month: formData.month.trim(),
-          year: formData.year.trim()
-        }
-      };
-
-      console.log('Sending registration data:', formattedData); // Debug log
-
-      // Make the API call
-      const response = await axios.post(
-        'https://full-stack-music-backend.onrender.com/api/auth/register',
-        formattedData,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await axios.post('https://full-stack-music-backend.onrender.com/api/auth/register', formData);
       
-      console.log('Registration response:', response.data); // Debug log
-
       if (response.data) {
-        localStorage.setItem('email', formData.email);
-        navigate('/verify-otp');
+        localStorage.setItem('email', formData.email); // Store email in localStorage
+        navigate('/verify-otp'); // Redirect to OTP verification page
       }
     } catch (error) {
       console.error("Registration error:", error);
-      if (error.response) {
-        // Log detailed error information
-        console.error("Error response:", error.response.data);
-        setError(error.response.data.message || "Registration failed. Please try again.");
-      } else if (error.request) {
-        // Request was made but no response received
-        console.error("No response received:", error.request);
-        setError("Network error. Please check your connection.");
-      } else {
-        // Error in request setup
-        console.error("Request setup error:", error.message);
-        setError("An error occurred. Please try again.");
-      }
+      setError(error.response?.data?.message || "Registration failed");
     }
   };
 
@@ -193,20 +119,11 @@ const CreateAccount = () => {
               <input
                 type="text"
                 placeholder="DD"
-                required
-                pattern="[0-9]*"
-                maxLength="2"
                 className="w-16 px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
                 value={formData.day}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, '');
-                  if (value === '' || (parseInt(value) > 0 && parseInt(value) <= 31)) {
-                    setFormData({...formData, day: value});
-                  }
-                }}
+                onChange={(e) => setFormData({...formData, day: e.target.value})}
               />
               <select
-                required
                 className="flex-1 px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
                 value={formData.month}
                 onChange={(e) => setFormData({...formData, month: e.target.value})}
@@ -219,28 +136,9 @@ const CreateAccount = () => {
               <input
                 type="text"
                 placeholder="YYYY"
-                required
-                pattern="[0-9]*"
-                maxLength="4"
                 className="w-20 px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
                 value={formData.year}
-                onChange={(e) => {
-                  // Allow any numeric input initially
-                  const value = e.target.value.replace(/\D/g, '');
-                  
-                  // Update state with the value regardless of validation
-                  setFormData({...formData, year: value});
-                  
-                  // Optional: Add error state if the year is invalid when complete
-                  if (value.length === 4) {
-                    const yearNum = parseInt(value);
-                    if (yearNum < 1900 || yearNum > new Date().getFullYear()) {
-                      setError('Please enter a valid year between 1900 and ' + new Date().getFullYear());
-                    } else {
-                      setError('');
-                    }
-                  }
-                }}
+                onChange={(e) => setFormData({...formData, year: e.target.value})}
               />
             </div>
           </div>
@@ -268,7 +166,6 @@ const CreateAccount = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            onClick={() => console.log('Form submitted')}
             className="w-full bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-4 rounded-full mt-6"
           >
             Create account
