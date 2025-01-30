@@ -37,16 +37,12 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // Create user with validated data
+    // Create user with only the required fields
     const user = new User({
       name,
       email,
       password,
-      dateOfBirth: {
-        day: dateOfBirth.day,
-        month: dateOfBirth.month,
-        year: dateOfBirth.year
-      },
+      dateOfBirth,
       gender
     });
 

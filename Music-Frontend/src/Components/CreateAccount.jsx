@@ -30,6 +30,9 @@ const CreateAccount = () => {
       // Log the current form data
       console.log('Current form data:', formData);
 
+      // Clear previous error
+      setError('');
+
       // Validate required fields
       if (!formData.name || !formData.email || !formData.password || !formData.gender) {
         setError("Please fill in all required fields");
@@ -43,8 +46,9 @@ const CreateAccount = () => {
       }
 
       // Password validation
-      if (formData.password.length < 6) {
+      if (!formData.password || formData.password.length < 6) {
         setError("Password must be at least 6 characters long");
+        console.log("Password validation failed"); // Debug log
         return;
       }
 
@@ -75,6 +79,8 @@ const CreateAccount = () => {
         formattedData
       );
       
+      console.log('Registration response:', response.data); // Debug log
+
       if (response.data) {
         localStorage.setItem('email', formData.email);
         navigate('/verify-otp');
@@ -103,6 +109,13 @@ const CreateAccount = () => {
         <h1 className="text-2xl font-bold text-center mb-6">
           Create an account
         </h1>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-500 text-white p-3 rounded-lg mb-4">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleRegister} className="space-y-4">
           {/* Email */}
