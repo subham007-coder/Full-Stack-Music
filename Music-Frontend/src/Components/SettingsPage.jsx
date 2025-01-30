@@ -45,15 +45,15 @@ const SettingsPage = () => {
   };
 
   // Function to generate and set new avatar
-  const generateNewAvatar = async (style, seed) => {
+  const generateNewAvatar = async (style) => {
     try {
-      console.log('Generating new avatar with style:', style, 'and seed:', seed); // Debug log
+      console.log('Generating new avatar with style:', style); // Debug log
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
       
       const response = await axios.post(
         `https://full-stack-music-backend.onrender.com/api/users/${userId}/avatar`,
-        { style, seed }, // Send both style and seed to backend
+        { style }, // Send selected style to backend
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -72,6 +72,7 @@ const SettingsPage = () => {
       }
     } catch (error) {
       console.error('Error generating new avatar:', error);
+      // Show error to user
       alert('Failed to update avatar. Please try again.');
     }
   };
@@ -166,7 +167,7 @@ const SettingsPage = () => {
       {/* Avatar Selection Modal */}
       {showAvatarModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-          <div className="bg-zinc-900 rounded-lg w-full max-w-md max-h-[80vh] overflow-y-auto">
+          <div className="bg-zinc-900 rounded-lg w-full max-w-md">
             <div className="p-4 border-b border-zinc-800 flex justify-between items-center">
               <h3 className="text-lg font-semibold">Choose Avatar Style</h3>
               <button 
@@ -185,28 +186,20 @@ const SettingsPage = () => {
                 { id: 'pixel-art', name: 'Pixel Art' },
                 { id: 'bottts', name: 'Robots' }
               ].map((style) => (
-                <div key={style.id} className="mb-6">
-                  <h4 className="text-sm text-gray-400 mb-3">{style.name}</h4>
-                  <div className="grid grid-cols-3 gap-3">
-                    {/* Generate 6 random previews for each style */}
-                    {Array.from({ length: 6 }, (_, index) => {
-                      const seed = Math.random().toString(36).substring(7);
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => generateNewAvatar(style.id, seed)}
-                          className="aspect-square rounded-lg overflow-hidden bg-zinc-800 hover:ring-2 hover:ring-green-500 transition-all"
-                        >
-                          <img
-                            src={`https://api.dicebear.com/6.x/${style.id}/svg?seed=${seed}`}
-                            alt={`${style.name} preview ${index + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </button>
-                      );
-                    })}
+                <button
+                  key={style.id}
+                  onClick={() => generateNewAvatar(style.id)}
+                  className="w-full text-left px-4 py-3 hover:bg-zinc-800 flex items-center justify-between rounded-lg mb-2"
+                >
+                  <span>{style.name}</span>
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-800">
+                    <img
+                      src={`https://api.dicebear.com/6.x/${style.id}/svg?seed=${userData.email}`}
+                      alt={style.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>

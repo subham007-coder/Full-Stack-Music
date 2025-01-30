@@ -71,17 +71,22 @@ router.post('/languages/names', async (req, res) => {
 router.post('/:userId/avatar', protect, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    const { style = 'micah', seed } = req.body; // Get both style and seed
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Use provided seed or generate new one
-    const avatarSeed = seed || crypto.randomBytes(16).toString("hex");
-    
-    // Generate avatar URL with the specific seed
-    const avatarUrl = `https://api.dicebear.com/6.x/${style}/svg?seed=${avatarSeed}`;
+    // Generate new avatar URL
+    const seed = crypto.randomBytes(16).toString("hex");
+    let style = "micah";
+
+    if (user.gender === "Male") {
+      style = "adventurer";
+    } else if (user.gender === "Female") {
+      style = "adventurer-neutral";
+    }
+
+    const avatarUrl = `https://api.dicebear.com/6.x/${style}/svg?seed=${seed}`;
     
     // Update user's avatar URL
     user.avatarUrl = avatarUrl;
