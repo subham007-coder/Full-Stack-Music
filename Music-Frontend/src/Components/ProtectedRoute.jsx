@@ -1,15 +1,10 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('userId');
 
-  if (!token || !userId) {
-    return <Navigate to="/" />;
-  }
-
-  return children;
+  return token ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

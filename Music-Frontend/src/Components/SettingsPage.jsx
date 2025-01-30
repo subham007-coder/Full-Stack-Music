@@ -65,8 +65,9 @@ const SettingsPage = () => {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
+    localStorage.removeItem("token"); // Remove token
+    localStorage.removeItem("user");  // Remove user data
+    navigate("/login"); // Redirect to login
   };
 
   return (
