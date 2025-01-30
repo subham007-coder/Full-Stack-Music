@@ -137,7 +137,7 @@ const SettingsPage = () => {
       // Clear all local storage
       localStorage.clear();
       // Redirect to signup page
-      navigate('/signup');
+      navigate('/create-account');
     } catch (error) {
       console.error('Error deleting account:', error);
       alert('Failed to delete account. Please try again.');
@@ -322,7 +322,7 @@ const SettingsPage = () => {
                 <IoTrashOutline className="text-xl" />
                 <div>
                   <span className="block">Delete Account</span>
-                  <span className="text-sm text-gray-400">This action cannot be undone</span>
+                  {/* <span className="text-sm text-gray-400">This action cannot be undone</span> */}
                 </div>
               </div>
             </button>
