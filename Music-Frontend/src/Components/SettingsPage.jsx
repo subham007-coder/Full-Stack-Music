@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IoPersonOutline } from 'react-icons/io5';
+import { IoPersonOutline, IoCameraOutline } from 'react-icons/io5';
 import { FiLogOut } from 'react-icons/fi';
 import { FaBirthdayCake } from 'react-icons/fa';  // Import the birthday icon
 import axios from 'axios';
@@ -15,8 +15,42 @@ const SettingsPage = () => {
     preferredLanguages: [],
     avatarUrl: '', // Store the avatar URL
   });
+  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
 
   const navigate = useNavigate();
+
+  // Function to get initials
+  const getInitials = (name) => {
+    return name ? name.charAt(0).toUpperCase() : '?';
+  };
+
+  // Function to generate new avatar
+  const generateNewAvatar = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+      
+      const response = await axios.post(
+        `https://full-stack-music-backend.onrender.com/api/users/${userId}/avatar`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.data.avatarUrl) {
+        setUserData(prev => ({
+          ...prev,
+          avatarUrl: response.data.avatarUrl
+        }));
+        setShowAvatarOptions(false);
+      }
+    } catch (error) {
+      console.error('Error generating new avatar:', error);
+    }
+  };
 
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
@@ -69,25 +103,52 @@ const SettingsPage = () => {
       {/* Profile Section with Avatar */}
       <div className="px-4 mb-6">
         <div className="flex items-center space-x-4 mb-4">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-700">
-            <img
-              src={userData.avatarUrl} // Use the stored avatar URL
-              alt={`${userData.name}'s avatar`}
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-              crossOrigin="anonymous"
-              onError={(e) => {
-                console.log("Avatar load error, trying simple fallback");
-                e.target.onerror = null;
-                e.target.src = 'path/to/fallback/image.png'; // Replace with your fallback image path
-              }}
-            />
+          <div className="relative">
+            <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-700 flex items-center justify-center">
+              {userData.avatarUrl ? (
+                <img
+                  src={userData.avatarUrl}
+                  alt={`${userData.name}'s avatar`}
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full bg-green-600 flex items-center justify-center text-2xl font-bold">
+                  {getInitials(userData.name)}
+                </div>
+              )}
+            </div>
+            
+            {/* Edit Avatar Button */}
+            <button
+              onClick={() => setShowAvatarOptions(!showAvatarOptions)}
+              className="absolute bottom-0 right-0 bg-green-500 rounded-full p-1.5 text-black"
+            >
+              <IoCameraOutline size={16} />
+            </button>
           </div>
           <div>
             <h2 className="text-xl font-semibold">{userData.name}</h2>
             <p className="text-gray-400">{userData.email}</p>
           </div>
         </div>
+
+        {/* Avatar Options Modal */}
+        {showAvatarOptions && (
+          <div className="mt-2 p-4 bg-gray-900 rounded-lg">
+            <button
+              onClick={generateNewAvatar}
+              className="w-full py-2 px-4 bg-green-500 text-black rounded-lg mb-2"
+            >
+              Generate New Avatar
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Settings Sections */}

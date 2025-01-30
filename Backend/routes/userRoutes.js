@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User'); // Adjust the path as necessary
 const router = express.Router();
+const crypto = require('crypto');
 
 // Update user preferences
 router.put('/update-preferences/:id', async (req, res) => {
@@ -62,6 +63,38 @@ router.post('/languages/names', async (req, res) => {
   } catch (error) {
     console.error('Error fetching language names:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Add this new route for avatar generation
+router.post('/:userId/avatar', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Generate new avatar URL
+    const seed = crypto.randomBytes(16).toString("hex");
+    let style = "micah";
+
+    if (user.gender === "Male") {
+      style = "adventurer";
+    } else if (user.gender === "Female") {
+      style = "adventurer-neutral";
+    }
+
+    const avatarUrl = `https://api.dicebear.com/6.x/${style}/svg?seed=${seed}`;
+    
+    // Update user's avatar URL
+    user.avatarUrl = avatarUrl;
+    await user.save();
+
+    res.json({ avatarUrl });
+  } catch (error) {
+    console.error('Error generating new avatar:', error);
+    res.status(500).json({ message: 'Error generating new avatar' });
   }
 });
 
