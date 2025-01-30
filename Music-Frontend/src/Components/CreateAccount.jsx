@@ -204,9 +204,20 @@ const CreateAccount = () => {
                 className="w-20 px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
                 value={formData.year}
                 onChange={(e) => {
+                  // Allow any numeric input initially
                   const value = e.target.value.replace(/\D/g, '');
-                  if (value === '' || (parseInt(value) >= 1900 && parseInt(value) <= new Date().getFullYear())) {
-                    setFormData({...formData, year: value});
+                  
+                  // Update state with the value regardless of validation
+                  setFormData({...formData, year: value});
+                  
+                  // Optional: Add error state if the year is invalid when complete
+                  if (value.length === 4) {
+                    const yearNum = parseInt(value);
+                    if (yearNum < 1900 || yearNum > new Date().getFullYear()) {
+                      setError('Please enter a valid year between 1900 and ' + new Date().getFullYear());
+                    } else {
+                      setError('');
+                    }
                   }
                 }}
               />
