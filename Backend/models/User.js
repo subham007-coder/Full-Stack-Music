@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
       required: true
     },
     year: {
-      type: String, 
+      type: String,
       required: true
     }
   },
@@ -44,12 +44,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ['Male', 'Female', 'Non-binary', 'Other']
   },
-  preferredArtists: [{
-    type: String
-  }],
-  preferredLanguages: [{
-    type: String
-  }],
+  preferredArtists: [String],
+  preferredLanguages: [String],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -57,6 +53,8 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
   avatarUrl: { type: String },
+}, {
+  timestamps: true
 });
 
 // Hash password before saving
