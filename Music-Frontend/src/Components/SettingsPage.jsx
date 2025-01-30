@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IoPersonOutline, IoCameraOutline } from 'react-icons/io5';
+import { IoPersonOutline, IoCameraOutline, IoCloseOutline } from 'react-icons/io5';
 import { FiLogOut } from 'react-icons/fi';
 import { FaBirthdayCake } from 'react-icons/fa';  // Import the birthday icon
 import axios from 'axios';
@@ -15,24 +15,44 @@ const SettingsPage = () => {
     preferredLanguages: [],
     avatarUrl: '', // Store the avatar URL
   });
-  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState('');
 
   const navigate = useNavigate();
+
+  // Available avatar styles
+  const avatarStyles = [
+    { id: 'adventurer', name: 'Adventurer', preview: [] },
+    { id: 'adventurer-neutral', name: 'Adventurer Neutral', preview: [] },
+    { id: 'micah', name: 'Micah', preview: [] },
+    { id: 'pixel-art', name: 'Pixel Art', preview: [] },
+    { id: 'bottts', name: 'Robots', preview: [] }
+  ];
+
+  // Generate preview avatars for each style
+  useEffect(() => {
+    avatarStyles.forEach(style => {
+      style.preview = Array(4).fill(null).map(() => {
+        const seed = Math.random().toString(36).substring(7);
+        return `https://api.dicebear.com/6.x/${style.id}/svg?seed=${seed}`;
+      });
+    });
+  }, []);
 
   // Function to get initials
   const getInitials = (name) => {
     return name ? name.charAt(0).toUpperCase() : '?';
   };
 
-  // Function to generate new avatar
-  const generateNewAvatar = async () => {
+  // Function to generate and set new avatar
+  const generateNewAvatar = async (style) => {
     try {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
       
       const response = await axios.post(
         `https://full-stack-music-backend.onrender.com/api/users/${userId}/avatar`,
-        {},
+        { style }, // Send selected style to backend
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -45,7 +65,7 @@ const SettingsPage = () => {
           ...prev,
           avatarUrl: response.data.avatarUrl
         }));
-        setShowAvatarOptions(false);
+        setShowAvatarModal(false);
       }
     } catch (error) {
       console.error('Error generating new avatar:', error);
@@ -126,7 +146,7 @@ const SettingsPage = () => {
             
             {/* Edit Avatar Button */}
             <button
-              onClick={() => setShowAvatarOptions(!showAvatarOptions)}
+              onClick={() => setShowAvatarModal(true)}
               className="absolute bottom-0 right-0 bg-green-500 rounded-full p-1.5 text-black"
             >
               <IoCameraOutline size={16} />
@@ -137,19 +157,47 @@ const SettingsPage = () => {
             <p className="text-gray-400">{userData.email}</p>
           </div>
         </div>
-
-        {/* Avatar Options Modal */}
-        {showAvatarOptions && (
-          <div className="mt-2 p-4 bg-gray-900 rounded-lg">
-            <button
-              onClick={generateNewAvatar}
-              className="w-full py-2 px-4 bg-green-500 text-black rounded-lg mb-2"
-            >
-              Generate New Avatar
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Avatar Selection Modal */}
+      {showAvatarModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+          <div className="bg-zinc-900 rounded-lg w-full max-w-lg max-h-[80vh] overflow-y-auto">
+            <div className="p-4 border-b border-zinc-800 flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Choose Avatar Style</h3>
+              <button 
+                onClick={() => setShowAvatarModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <IoCloseOutline size={24} />
+              </button>
+            </div>
+            
+            <div className="p-4 space-y-4">
+              {avatarStyles.map((style) => (
+                <div key={style.id} className="space-y-2">
+                  <h4 className="font-medium text-gray-300">{style.name}</h4>
+                  <div className="grid grid-cols-4 gap-2">
+                    {style.preview.map((url, index) => (
+                      <button
+                        key={index}
+                        onClick={() => generateNewAvatar(style.id)}
+                        className="aspect-square rounded-lg overflow-hidden bg-zinc-800 hover:ring-2 hover:ring-green-500 transition-all"
+                      >
+                        <img
+                          src={url}
+                          alt={`${style.name} preview ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Settings Sections */}
       <div className="px-4">
