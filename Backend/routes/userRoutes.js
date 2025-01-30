@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/User'); // Adjust the path as necessary
 const router = express.Router();
 const crypto = require('crypto');
+const { protect } = require('../middleware/authMiddleware');
 
 // Update user preferences
 router.put('/update-preferences/:id', async (req, res) => {
