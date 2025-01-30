@@ -37,13 +37,26 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // Create user with only the required fields
+    // Generate avatar URL based on gender
+    const seed = crypto.randomBytes(16).toString("hex");
+    let style = "micah"; // default style
+
+    if (gender === "Male") {
+      style = "adventurer";
+    } else if (gender === "Female") {
+      style = "adventurer-neutral";
+    }
+
+    const avatarUrl = `https://api.dicebear.com/6.x/${style}/svg?seed=${seed}`;
+
+    // Create user with avatar URL
     const user = new User({
       name,
       email,
       password,
       dateOfBirth,
-      gender
+      gender,
+      avatarUrl // Include the generated avatar URL
     });
 
     await user.save();
@@ -61,7 +74,8 @@ router.post("/register", async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Registration successful. Please check your email for the OTP."
+      message: "Registration successful. Please check your email for the OTP.",
+      avatarUrl // Send back the avatar URL in the response
     });
 
   } catch (error) {
