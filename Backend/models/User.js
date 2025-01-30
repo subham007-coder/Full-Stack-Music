@@ -11,16 +11,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  confirmEmail: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function(value) {
-        return value === this.email;
-      },
-      message: 'Email addresses must match'
-    }
-  },
+  // confirmEmail: {
+  //   type: String,
+  //   required: true,
+  //   validate: {
+  //     validator: function(value) {
+  //       return value === this.email;
+  //     },
+  //     message: 'Email addresses must match'
+  //   }
+  // },
   password: {
     type: String,
     required: true,
