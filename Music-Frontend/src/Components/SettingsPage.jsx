@@ -167,7 +167,7 @@ const SettingsPage = () => {
       {/* Avatar Selection Modal */}
       {showAvatarModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-          <div className="bg-zinc-900 rounded-lg w-full max-w-md">
+          <div className="bg-zinc-900 rounded-lg w-full max-w-md max-h-[80vh] overflow-y-auto">
             <div className="p-4 border-b border-zinc-800 flex justify-between items-center">
               <h3 className="text-lg font-semibold">Choose Avatar Style</h3>
               <button 
@@ -179,27 +179,51 @@ const SettingsPage = () => {
             </div>
             
             <div className="p-4">
+              {/* Filter styles based on user's gender */}
               {[
-                { id: 'adventurer', name: 'Adventurer' },
-                { id: 'adventurer-neutral', name: 'Adventurer Neutral' },
-                { id: 'micah', name: 'Micah' },
-                { id: 'pixel-art', name: 'Pixel Art' },
-                { id: 'bottts', name: 'Robots' }
+                ...(userData.gender === 'Male' ? [
+                  { id: 'adventurer', name: 'Adventurer' },
+                  { id: 'bottts', name: 'Robots' }, // Correct ID for robots
+                  { id: 'pixel-art', name: 'Pixel Art' }
+                ] : []),
+                ...(userData.gender === 'Female' ? [
+                  { id: 'adventurer-neutral', name: 'Adventurer Neutral' },
+                  { id: 'bottts', name: 'Robots' }, // Correct ID for robots
+                  { id: 'pixel-art', name: 'Pixel Art' }
+                ] : []),
+                ...(userData.gender === 'Non-binary' || userData.gender === 'Other' ? [
+                  { id: 'micah', name: 'Micah' },
+                  { id: 'bottts', name: 'Robots' }, // Correct ID for robots
+                  { id: 'pixel-art', name: 'Pixel Art' }
+                ] : [])
               ].map((style) => (
-                <button
-                  key={style.id}
-                  onClick={() => generateNewAvatar(style.id)}
-                  className="w-full text-left px-4 py-3 hover:bg-zinc-800 flex items-center justify-between rounded-lg mb-2"
-                >
-                  <span>{style.name}</span>
-                  <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-800">
-                    <img
-                      src={`https://api.dicebear.com/6.x/${style.id}/svg?seed=${userData.email}`}
-                      alt={style.name}
-                      className="w-full h-full object-cover"
-                    />
+                <div key={style.id} className="mb-6">
+                  <h4 className="text-sm text-gray-400 mb-3">{style.name}</h4>
+                  <div className="grid grid-cols-3 gap-3">
+                    {/* Generate 9 random previews for each style */}
+                    {Array.from({ length: 9 }, (_, index) => {
+                      const seed = Math.random().toString(36).substring(7);
+                      
+                      // Special options for bottts (robots)
+                      const options = style.id === 'bottts' ? 
+                        '&radius=50&backgroundColor=172229' : '';
+
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => generateNewAvatar(style.id, seed)}
+                          className="aspect-square rounded-lg overflow-hidden bg-zinc-800 hover:ring-2 hover:ring-green-500 transition-all"
+                        >
+                          <img
+                            src={`https://api.dicebear.com/6.x/${style.id}/svg?seed=${seed}${options}`}
+                            alt={`${style.name} preview ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      );
+                    })}
                   </div>
-                </button>
+                </div>
               ))}
             </div>
           </div>
