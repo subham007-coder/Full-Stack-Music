@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FcGoogle } from 'react-icons/fc';
@@ -10,6 +10,22 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  // Add useEffect to check for existing credentials
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    const user = localStorage.getItem('user');
+
+    // If all credentials exist, redirect to home
+    if (token && userId && user) {
+      // Verify if token matches the user's token
+      const userData = JSON.parse(user);
+      if (userData.token === token) {
+        navigate('/home');
+      }
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
