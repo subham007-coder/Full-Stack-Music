@@ -27,23 +27,15 @@ const CreateAccount = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://full-stack-music-backend.onrender.com/api/auth/register', {
-        name: formData.name,
-        email: formData.email,
-        confirmEmail: formData.confirmEmail, // Include confirmEmail in the request
-        password: formData.password,
-        dateOfBirth: {
-          day: formData.day,
-          month: formData.month,
-          year: formData.year,
-        },
-        gender: formData.gender,
-      });
-      localStorage.setItem('email', formData.email); // Store email in localStorage
-      navigate('/verify-otp'); // Redirect to OTP verification page
+      const response = await axios.post('https://full-stack-music-backend.onrender.com/api/auth/register', formData);
+      
+      if (response.data) {
+        localStorage.setItem('email', formData.email); // Store email in localStorage
+        navigate('/verify-otp'); // Redirect to OTP verification page
+      }
     } catch (error) {
       console.error("Registration error:", error);
-      setError("Registration failed. Please try again.");
+      setError(error.response?.data?.message || "Registration failed");
     }
   };
 
