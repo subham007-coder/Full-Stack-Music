@@ -11,6 +11,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  confirmEmail: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function(value) {
+        return value === this.email;
+      },
+      message: 'Email addresses must match'
+    }
+  },
   password: {
     type: String,
     required: true,
@@ -25,7 +35,7 @@ const userSchema = new mongoose.Schema({
       required: true
     },
     year: {
-      type: String,
+      type: String, 
       required: true
     }
   },
@@ -34,20 +44,19 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ['Male', 'Female', 'Non-binary', 'Other']
   },
-  preferredArtists: [String],
-  preferredLanguages: [String],
+  preferredArtists: [{
+    type: String
+  }],
+  preferredLanguages: [{
+    type: String
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  isVerified: { 
-    type: Boolean, 
-    default: false 
-  },
-  verificationToken: String,
-  avatarUrl: String
-}, {
-  timestamps: true
+  isVerified: { type: Boolean, default: false },
+  verificationToken: { type: String },
+  avatarUrl: { type: String },
 });
 
 // Hash password before saving

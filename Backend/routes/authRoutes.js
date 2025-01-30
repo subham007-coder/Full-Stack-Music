@@ -11,61 +11,61 @@ const md5 = require("md5");
 // Register user
 router.post("/register", async (req, res) => {
   try {
-    console.log('Received registration request:', req.body); // Debug log
+    const { name, email, confirmEmail, password, dateOfBirth, gender } = req.body;
 
-    const { name, email, password, dateOfBirth, gender } = req.body;
-
-    // Validation
-    if (!name || !email || !password || !dateOfBirth || !gender) {
-      console.log('Missing required fields:', { name, email, password, dateOfBirth, gender }); // Debug log
-      return res.status(400).json({ 
-        message: "All fields are required" 
-      });
+    // Check if email and confirmEmail match
+    if (email !== confirmEmail) {
+      return res.status(400).json({ message: "Email addresses must match" });
     }
 
     // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ 
-        message: "Email already registered" 
-      });
+      return res.status(400).json({ message: "Email already registered" });
     }
+
+    // Generate unique seed for avatar
+    const seed = crypto.randomBytes(16).toString("hex");
+
+    // Set avatar parameters based on gender
+    let style;
+    if (gender === "Male") {
+      style = "adventurer"; // Male avatar style
+    } else if (gender === "Female") {
+      style = "adventurer-neutral"; // Female avatar style
+    } else {
+      style = "micah"; // Neutral style for non-binary or undefined genders
+    }
+
+    const avatarUrl = `https://api.dicebear.com/6.x/${style}/svg?seed=${seed}`;
 
     // Create user
     const user = await User.create({
       name,
       email,
+      confirmEmail,
       password,
       dateOfBirth,
-      gender
+      gender,
+      avatarUrl,
+      isVerified: false, // Add a field to track email verification
     });
 
-    console.log('User created successfully:', user); // Debug log
-
-    // Generate OTP
+    // Generate a 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    user.verificationToken = otp;
+    user.verificationToken = otp; // Store OTP in the user document
     await user.save();
 
-    // Send verification email
-    try {
-      await sendVerificationEmail(email, otp);
-      console.log('Verification email sent successfully'); // Debug log
-    } catch (emailError) {
-      console.error("Email sending error:", emailError);
-    }
+    // Send OTP via email
+    await sendVerificationEmail(email, otp);
 
     res.status(200).json({
-      message: "Registration successful. Please check your email for the OTP."
+      message: "Registration successful. Please check your email for the OTP.",
+      avatarUrl,
     });
-
   } catch (error) {
     console.error("Registration error:", error);
-    res.status(500).json({ 
-      message: "Registration failed", 
-      error: error.message,
-      stack: error.stack // Include stack trace for debugging
-    });
+    res.status(500).json({ message: "Registration failed", error: error.message });
   }
 });
 
