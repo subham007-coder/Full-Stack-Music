@@ -102,4 +102,28 @@ router.post('/:userId/avatar', protect, async (req, res) => {
   }
 });
 
+// Delete user account
+router.delete('/:userId', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Ensure user can only delete their own account
+    if (user._id.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'Not authorized to delete this account' });
+    }
+
+    // Delete the user
+    await User.findByIdAndDelete(req.params.userId);
+
+    res.json({ message: 'Account deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    res.status(500).json({ message: 'Error deleting account' });
+  }
+});
+
 module.exports = router; 

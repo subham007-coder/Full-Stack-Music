@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IoPersonOutline, IoCameraOutline, IoCloseOutline } from 'react-icons/io5';
+import { IoPersonOutline, IoCameraOutline, IoCloseOutline, IoTrashOutline } from 'react-icons/io5';
 import { FiLogOut } from 'react-icons/fi';
 import { FaBirthdayCake } from 'react-icons/fa';  // Import the birthday icon
 import axios from 'axios';
@@ -17,6 +17,7 @@ const SettingsPage = () => {
   });
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -116,6 +117,31 @@ const SettingsPage = () => {
     localStorage.removeItem("token"); // Remove token
     localStorage.removeItem("user");  // Remove user data
     navigate("/login"); // Redirect to login
+  };
+
+  // Function to handle account deletion
+  const handleDeleteAccount = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+
+      await axios.delete(
+        `https://full-stack-music-backend.onrender.com/api/users/${userId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      // Clear all local storage
+      localStorage.clear();
+      // Redirect to signup page
+      navigate('/signup');
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      alert('Failed to delete account. Please try again.');
+    }
   };
 
   return (
@@ -284,6 +310,25 @@ const SettingsPage = () => {
           </div>
         </div>
 
+        {/* Danger Zone */}
+        <div className="mb-6">
+          <h3 className="text-gray-400 text-sm uppercase mb-2">Danger Zone</h3>
+          <div className="bg-gray-900 rounded-lg">
+            <button 
+              onClick={() => setShowDeleteModal(true)}
+              className="w-full px-4 py-4 flex items-center justify-between text-red-500 hover:bg-red-500/10"
+            >
+              <div className="flex items-center space-x-3">
+                <IoTrashOutline className="text-xl" />
+                <div>
+                  <span className="block">Delete Account</span>
+                  <span className="text-sm text-gray-400">This action cannot be undone</span>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
         {/* Logout Button */}
         <button 
           onClick={handleLogout}
@@ -293,6 +338,32 @@ const SettingsPage = () => {
           <span>Logout</span>
         </button>
       </div>
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+          <div className="bg-zinc-900 rounded-lg w-full max-w-md p-6">
+            <h3 className="text-xl font-bold text-red-500 mb-4">Delete Account</h3>
+            <p className="text-gray-300 mb-6">
+              Are you sure you want to delete your account? This action cannot be undone and you will lose all your data.
+            </p>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
