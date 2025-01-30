@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 const CreateAccount = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    confirmEmail: '', // Ensure this field is included
-    password: '',
     name: '',
+    email: '',
+    confirmEmail: '',
+    password: '',
     day: '',
     month: '',
     year: '',
@@ -27,15 +27,65 @@ const CreateAccount = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://full-stack-music-backend.onrender.com/api/auth/register', formData);
+      // Log the current form data
+      console.log('Current form data:', formData);
+
+      // Validate required fields
+      if (!formData.name || !formData.email || !formData.password || !formData.gender) {
+        setError("Please fill in all required fields");
+        return;
+      }
+
+      // Email validation
+      if (formData.email !== formData.confirmEmail) {
+        setError("Email addresses do not match");
+        return;
+      }
+
+      // Password validation
+      if (formData.password.length < 6) {
+        setError("Password must be at least 6 characters long");
+        return;
+      }
+
+      // Date validation
+      if (!formData.day || !formData.month || !formData.year) {
+        setError("Please fill in complete date of birth");
+        return;
+      }
+
+      // Format the data
+      const formattedData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        gender: formData.gender,
+        dateOfBirth: {
+          day: formData.day,
+          month: formData.month,
+          year: formData.year
+        }
+      };
+
+      // Log the formatted data being sent
+      console.log('Sending formatted data:', formattedData);
+
+      const response = await axios.post(
+        'https://full-stack-music-backend.onrender.com/api/auth/register',
+        formattedData
+      );
       
       if (response.data) {
-        localStorage.setItem('email', formData.email); // Store email in localStorage
-        navigate('/verify-otp'); // Redirect to OTP verification page
+        localStorage.setItem('email', formData.email);
+        navigate('/verify-otp');
       }
     } catch (error) {
       console.error("Registration error:", error);
-      setError(error.response?.data?.message || "Registration failed");
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else {
+        setError(error.response?.data?.message || "Registration failed. Please try again.");
+      }
     }
   };
 
@@ -119,11 +169,19 @@ const CreateAccount = () => {
               <input
                 type="text"
                 placeholder="DD"
+                required
+                maxLength="2"
                 className="w-16 px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
                 value={formData.day}
-                onChange={(e) => setFormData({...formData, day: e.target.value})}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 2);
+                  if (value === '' || (parseInt(value) >= 1 && parseInt(value) <= 31)) {
+                    setFormData({...formData, day: value});
+                  }
+                }}
               />
               <select
+                required
                 className="flex-1 px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
                 value={formData.month}
                 onChange={(e) => setFormData({...formData, month: e.target.value})}
@@ -136,9 +194,14 @@ const CreateAccount = () => {
               <input
                 type="text"
                 placeholder="YYYY"
+                required
+                maxLength="4"
                 className="w-20 px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
                 value={formData.year}
-                onChange={(e) => setFormData({...formData, year: e.target.value})}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                  setFormData({...formData, year: value});
+                }}
               />
             </div>
           </div>
