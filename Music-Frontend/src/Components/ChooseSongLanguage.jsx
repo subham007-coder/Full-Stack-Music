@@ -30,19 +30,17 @@ const ChooseSongLanguage = () => {
 
   const handleSubmit = async () => {
     try {
-      const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
-      console.log("Retrieved User ID:", userId); // Log the retrieved user ID
+      const userId = localStorage.getItem("userId");
       const languageNames = languages
         .filter((language) => selectedLanguages.includes(language.id))
-        .map((language) => language.name); // Extract language names
+        .map((language) => language.name);
       await axios.put(
         `https://full-stack-music-backend.onrender.com/api/users/update-preferences/${userId}`,
         {
-          preferredLanguages: languageNames, // Send language names to backend
+          preferredLanguages: languageNames,
         }
       );
-      // localStorage.setItem('userId', userId); // Store user ID in local storage
-      navigate("/home"); // Navigate to home after updating
+      navigate("/home");
     } catch (error) {
       console.error("Error updating preferences:", error);
     }

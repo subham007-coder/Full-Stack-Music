@@ -12,22 +12,20 @@ const ChooseArtists = () => {
 
   const handleNext = async () => {
     try {
-      const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
-      console.log("Retrieved User ID:", userId); // Log the retrieved user ID
+      const userId = localStorage.getItem("userId");
       if (!userId) {
-        throw new Error("User ID not found in local storage."); // Handle case where userId is not found
+        throw new Error("User ID not found in local storage.");
       }
-      // Extract artist names from selectedArtists
       const artistNames = selectedArtists.map(
         (artistId) => artists.find((artist) => artist.id === artistId).name
       );
       await axios.put(
         `https://full-stack-music-backend.onrender.com/api/users/update-preferences/${userId}`,
         {
-          preferredArtists: artistNames, // Send artist names to backend
+          preferredArtists: artistNames,
         }
       );
-      navigate("/choose-song-language"); // Navigate to ChooseSongLanguage after updating
+      navigate("/choose-song-language");
     } catch (error) {
       console.error("Error updating preferences:", error);
     }

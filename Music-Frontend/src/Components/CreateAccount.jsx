@@ -27,9 +27,6 @@ const CreateAccount = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // Log the current form data
-      console.log('Current form data:', formData);
-
       // Clear previous error
       setError('');
 
@@ -48,7 +45,6 @@ const CreateAccount = () => {
       // Password validation
       if (!formData.password || formData.password.length < 6) {
         setError("Password must be at least 6 characters long");
-        console.log("Password validation failed"); // Debug log
         return;
       }
 
@@ -71,22 +67,16 @@ const CreateAccount = () => {
         }
       };
 
-      // Log the formatted data being sent
-      console.log('Sending formatted data:', formattedData);
-
       const response = await axios.post(
         'https://full-stack-music-backend.onrender.com/api/auth/register',
         formattedData
       );
-      
-      console.log('Registration response:', response.data); // Debug log
 
       if (response.data) {
         localStorage.setItem('email', formData.email);
         navigate('/verify-otp');
       }
     } catch (error) {
-      console.error("Registration error:", error);
       if (error.response?.data?.error) {
         setError(error.response.data.error);
       } else {

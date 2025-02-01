@@ -96,7 +96,7 @@ const SettingsPage = () => {
           }
         });
 
-        console.log('Raw response data:', response.data);
+        // console.log('Raw response data:', response.data);
 
         // Format the date from the object structure
         const dateObj = response.data.dateOfBirth;
