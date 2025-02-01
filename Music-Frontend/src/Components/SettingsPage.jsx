@@ -48,7 +48,7 @@ const SettingsPage = () => {
   // Function to generate and set new avatar
   const generateNewAvatar = async (style) => {
     try {
-      console.log('Generating new avatar with style:', style); // Debug log
+    // console.log('Generating new avatar with style:', style); // Debug log
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
       
@@ -62,7 +62,7 @@ const SettingsPage = () => {
         }
       );
 
-      console.log('Avatar response:', response.data); // Debug log
+    // console.log('Avatar response:', response.data); // Debug log
 
       if (response.data.avatarUrl) {
         setUserData(prev => ({

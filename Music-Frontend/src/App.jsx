@@ -9,6 +9,7 @@ import CreateAccount from "./Components/CreateAccount";
 import Login from "./Components/Login";
 import SettingsPage from './Components/SettingsPage';
 import ProtectedRoute from "./Components/ProtectedRoute";
+import PlayerPage from "./Components/PlayerPage";
 import { AudioProvider } from "./context/AudioContext";
 import { UserDataProvider } from "./context/UserDataContext";
 
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/verify-otp" element={<VerifyOTP />} />
             <Route path="/choose-artists" element={<ChooseArtists />} />
             <Route path="/choose-song-language" element={<ChooseSongLanguage />} />
+            <Route path="/player" element={<PlayerPage />} />
             <Route 
               path="/home" 
               element={
