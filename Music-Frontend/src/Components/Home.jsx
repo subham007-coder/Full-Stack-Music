@@ -6,6 +6,7 @@ import {
   IoTimeOutline,
   IoSettingsSharp,
   IoClose,
+  IoDownloadOutline,
 } from "react-icons/io5";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { gsap } from "gsap";
@@ -327,6 +328,19 @@ const Home = () => {
     }
   };
 
+  const handleDownloadApp = () => {
+    // Direct download link to your APK file
+    const apkUrl = 'https://www.webintoapp.com/download/apk/582050/app-release.apk';
+    
+    // Create an anchor element and trigger download
+    const link = document.createElement('a');
+    link.href = apkUrl;
+    link.setAttribute('download', 'music-app.apk');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="flex-1 bg-gradient-to-b from-zinc-900 to-black overflow-y-auto pb-24">
@@ -336,8 +350,12 @@ const Home = () => {
             <div className="flex justify-between items-center">
               <h1 className="text-2xl font-bold">{greeting}</h1>
               <div className="flex items-center gap-4">
-                <button className="text-white">
-                  <IoNotifications className="text-2xl" />
+                <button 
+                  className="flex items-center gap-2 px-3 py-1 bg-green-500 text-black rounded-full text-sm hover:bg-green-400 transition-colors"
+                  onClick={handleDownloadApp}
+                >
+                  <IoDownloadOutline className="text-lg" />
+                  <span>Install App</span>
                 </button>
                 <button className="text-white">
                   <IoTimeOutline className="text-2xl" />
