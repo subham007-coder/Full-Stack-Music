@@ -79,7 +79,7 @@ const ChooseArtists = () => {
         {/* Centered Logo */}
         <div className="flex justify-center mb-4">
           <img
-            src="/src/assets/fabicon.png"
+            src="assets/fabicon.png"
             alt="Spotify Logo"
             className="w-24"
           />
