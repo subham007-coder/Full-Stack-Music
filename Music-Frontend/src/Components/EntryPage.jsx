@@ -47,7 +47,7 @@ const Login = () => {
       <div className="w-full max-w-md p-8 space-y-8">
         <div className="flex justify-center">
           <img 
-            src="/src/assets/fabicon.png"
+            src="/assets/fabicon.png"
             alt="MusicMirror Logo"
             className="w-28 my-6"
           />
