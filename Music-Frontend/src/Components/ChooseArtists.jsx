@@ -79,9 +79,9 @@ const ChooseArtists = () => {
         {/* Centered Logo */}
         <div className="flex justify-center mb-4">
           <img
-            src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Black.png"
+            src="/src/assets/fabicon.png"
             alt="Spotify Logo"
-            className="w-24 invert"
+            className="w-24"
           />
         </div>
 

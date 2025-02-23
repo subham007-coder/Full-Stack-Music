@@ -45,11 +45,13 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="w-full max-w-md p-8 space-y-8">
-        <img 
-          src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Black.png"
-          alt="Spotify Logo"
-          className="w-32 invert mx-auto"
-        />
+        <div className="flex justify-center">
+          <img 
+            src="/src/assets/fabicon.png"
+            alt="MusicMirror Logo"
+            className="w-28 my-6"
+          />
+        </div>
 
         {/* Title */}
         <div className="text-center space-y-2">
