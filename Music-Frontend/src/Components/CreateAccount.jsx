@@ -89,9 +89,9 @@ const CreateAccount = () => {
     <div className="min-h-screen bg-black flex flex-col items-center p-4">
       {/* Logo */}
       <img 
-        src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Black.png"
-        alt="Spotify Logo"
-        className="w-28 invert my-6"
+        src="/assets/fabicon.png"
+        alt="MusicMirror Logo"
+        className="w-28 my-6"
       />
 
       {/* Form Container */}
