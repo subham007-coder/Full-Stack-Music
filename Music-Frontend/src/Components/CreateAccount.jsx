@@ -232,7 +232,7 @@ const CreateAccount = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-4 rounded-full mt-6"
+            className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center transition duration-200"
           >
             Create account
           </button>

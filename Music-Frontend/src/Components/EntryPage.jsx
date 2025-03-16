@@ -46,27 +46,28 @@ const Login = () => {
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="w-full max-w-md p-8 space-y-8">
         <div className="flex justify-center">
-          <img 
-            src="/assets/fabicon.png"
-            alt="MusicMirror Logo"
-            className="w-28 my-6"
+          <video 
+            src="/assets/LogoGif.mp4"
+            autoPlay
+            muted
+            className="w-40 my-2"
           />
         </div>
 
         {/* Title */}
         <div className="text-center space-y-2">
           <h1 className="text-white text-3xl font-bold">
-            Millions of songs.
+            Millions Of Story.
           </h1>
           <p className="text-white text-xl">
-            Free on Spotify.
+             On Nightfall Suspense.
           </p>
         </div>
 
         {/* Login Buttons */}
         <div className="space-y-4">
           {/* login Button */}
-          <Link to="/login" className="w-full bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-full font-semibold transition duration-200 flex items-center justify-center">
+          <Link to="/login" className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center transition duration-200">
             Login
           </Link>
 
@@ -77,16 +78,16 @@ const Login = () => {
           </button> */}
 
           {/* Google Button */}
-          <button className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center gap-2 transition duration-200">
+          {/* <button className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center gap-2 transition duration-200">
             <FcGoogle className="text-xl" />
             Continue with Google
-          </button>
+          </button> */}
 
           {/* Facebook Button */}
-          <button className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center gap-2 transition duration-200">
+          {/* <button className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center gap-2 transition duration-200">
             <FaFacebook className="text-xl text-blue-600" />
             Continue with Facebook
-          </button>
+          </button> */}
 
           {/* Additional Links to Other Pages */}
           <div className="space-y-4">
