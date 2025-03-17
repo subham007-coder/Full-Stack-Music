@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 
@@ -41,59 +41,79 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold text-center text-white">Login</h1>
+    <div className="min-h-screen bg-black flex flex-col items-center p-4">
+      {/* Logo */}
+      <img 
+        src="/assets/fabicon.png"
+        alt="MusicMirror Logo"
+        className="w-28 my-6"
+      />
+
+      {/* Form Container */}
+      <div className="w-full max-w-[320px] bg-black text-white">
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Login
+        </h1>
+
+        {/* Error Message */}
         {error && (
-          <div className="bg-red-500 text-white p-3 rounded-lg text-center">
+          <div className="bg-red-500 text-white p-3 rounded-lg mb-4">
             {error}
           </div>
         )}
+
         <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-400">Email</label>
+          {/* Email */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Email address</label>
             <input
               type="email"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white"
             />
           </div>
-          <div>
-            <label className="block text-sm text-gray-400">Password</label>
+
+          {/* Password */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full p-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-blue-500 focus:ring-offset-2"
+                className="w-full px-3 py-2 rounded bg-zinc-900 border border-zinc-700 focus:border-white pr-10"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
               >
-                {showPassword ? <HiEyeOff /> : <HiEye />}
+                {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
               </button>
             </div>
           </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-transparent border border-gray-500 hover:border-white text-white py-3 px-4 rounded-full font-semibold flex items-center justify-center transition duration-200"
           >
             Login
           </button>
-        </form>
-        <div className="text-center text-gray-400">
-          <p>
-            Don't have an account?{" "}
-            <a href="/create-account" className="text-white hover:underline">
+
+          {/* Create Account Link */}
+          <div className="text-center pt-4">
+            <span className="text-gray-400 text-sm">Don't have an account?</span>
+            <Link to="/create-account" className="text-white hover:underline ml-2 text-sm">
               Sign up
-            </a>
-          </p>
-        </div>
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   );
