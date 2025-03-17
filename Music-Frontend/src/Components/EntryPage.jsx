@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
@@ -10,6 +10,10 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [mediaError, setMediaError] = useState({ audio: null, video: null });
 
   // Add useEffect to check for existing credentials
   useEffect(() => {
@@ -26,6 +30,19 @@ const Login = () => {
       }
     }
   }, [navigate]);
+
+  // Add user interaction handler
+  const handleFirstInteraction = async () => {
+    if (!hasInteracted && audioRef.current) {
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        setHasInteracted(true);
+      } catch (err) {
+        setMediaError(prev => ({ ...prev, audio: err.message }));
+      }
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,8 +63,19 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="min-h-screen bg-black flex items-center justify-center" onClick={handleFirstInteraction}>
       <div className="w-full max-w-md p-8 space-y-8">
+        {/* Updated audio element */}
+        <audio
+          ref={audioRef}
+          src="/assets/EntryMusic.mp3"
+          preload="auto"
+          onError={(e) => {
+            console.error("Audio loading error:", e);
+            setMediaError(prev => ({ ...prev, audio: "Failed to load audio" }));
+          }}
+        />
+
         <div className="flex justify-center">
           <div className="flex justify-center">
             <video
@@ -60,8 +88,40 @@ const Login = () => {
               preload="metadata"
               className="w-52 my-2 rounded-full"
               controlsList="nodownload"
+              onError={(e) => {
+                console.error("Video loading error:", e);
+                setMediaError(prev => ({ ...prev, video: "Failed to load video" }));
+              }}
             />
           </div>
+        </div>
+
+        {/* Display any media errors */}
+        {(mediaError.audio || mediaError.video) && (
+          <div className="text-red-500 text-sm text-center">
+            {mediaError.audio && <p>Audio Error: {mediaError.audio}</p>}
+            {mediaError.video && <p>Video Error: {mediaError.video}</p>}
+          </div>
+        )}
+
+        {/* Audio control button */}
+        <div className="flex justify-center">
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent triggering handleFirstInteraction
+              if (isPlaying) {
+                audioRef.current.pause();
+              } else {
+                audioRef.current.play().catch(err => {
+                  setMediaError(prev => ({ ...prev, audio: err.message }));
+                });
+              }
+              setIsPlaying(!isPlaying);
+            }}
+            className="text-white text-sm hover:text-gray-300 transition-colors"
+          >
+            {isPlaying ? "Pause Music" : "Play Music"}
+          </button>
         </div>
 
         {/* Title */}
