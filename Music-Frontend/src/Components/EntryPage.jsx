@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
-import { HiPhone } from "react-icons/hi";
+import { HiPhone, HiMicrophone } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,18 +32,28 @@ const Login = () => {
     }
   }, [navigate]);
 
-  // Add user interaction handler
-  const handleFirstInteraction = async () => {
-    if (!hasInteracted && audioRef.current) {
-      try {
-        await audioRef.current.play();
-        setIsPlaying(true);
-        setHasInteracted(true);
-      } catch (err) {
-        setMediaError(prev => ({ ...prev, audio: err.message }));
+  // Replace the existing useEffect for user interaction with this:
+  useEffect(() => {
+    const handleUserClick = async () => {
+      if (!hasInteracted && audioRef.current) {
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+          setHasInteracted(true);
+        } catch (err) {
+          setMediaError(prev => ({ ...prev, audio: err.message }));
+        }
       }
-    }
-  };
+    };
+
+    // Only add click event listener
+    document.addEventListener('click', handleUserClick, { once: true });
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('click', handleUserClick);
+    };
+  }, [hasInteracted]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -63,13 +74,43 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center" onClick={handleFirstInteraction}>
+    <div className="min-h-screen bg-black flex items-center justify-center relative">
+      {/* Replace mic icon with speaker icon */}
+      <div className="absolute top-4 right-4 border-2 border-gray-500 rounded-full p-2">
+        {isPlaying ? (
+          <HiSpeakerWave 
+            className="text-2xl cursor-pointer text-white transition-colors duration-200 hover:text-gray-300"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (audioRef.current) {
+                audioRef.current.pause();
+                setIsPlaying(false);
+              }
+            }}
+          />
+        ) : (
+          <HiSpeakerXMark 
+            className="text-2xl cursor-pointer text-gray-500 transition-colors duration-200 hover:text-white"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (audioRef.current) {
+                audioRef.current.play().catch(err => {
+                  setMediaError(prev => ({ ...prev, audio: err.message }));
+                });
+                setIsPlaying(true);
+              }
+            }}
+          />
+        )}
+      </div>
+
       <div className="w-full max-w-md p-8 space-y-8">
         {/* Updated audio element */}
         <audio
           ref={audioRef}
           src="/assets/EntryMusic.mp3"
           preload="auto"
+          loop
           onError={(e) => {
             console.error("Audio loading error:", e);
             setMediaError(prev => ({ ...prev, audio: "Failed to load audio" }));
@@ -103,26 +144,6 @@ const Login = () => {
             {mediaError.video && <p>Video Error: {mediaError.video}</p>}
           </div>
         )}
-
-        {/* Audio control button */}
-        <div className="flex justify-center">
-          <button
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent triggering handleFirstInteraction
-              if (isPlaying) {
-                audioRef.current.pause();
-              } else {
-                audioRef.current.play().catch(err => {
-                  setMediaError(prev => ({ ...prev, audio: err.message }));
-                });
-              }
-              setIsPlaying(!isPlaying);
-            }}
-            className="text-white text-sm hover:text-gray-300 transition-colors"
-          >
-            {isPlaying ? "Pause Music" : "Play Music"}
-          </button>
-        </div>
 
         {/* Title */}
         <div className="text-center space-y-2">
