@@ -16,7 +16,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://full-stack-music.vercel.app', 'http://localhost:5174'],
+  origin: ['http://localhost:5173', 'https://full-stack-music.vercel.app', 'http://localhost:5174', 'https://f-end-puzzle-game-admin-panel.vercel.app'],
   credentials: true
 }));
 app.use(express.json());
