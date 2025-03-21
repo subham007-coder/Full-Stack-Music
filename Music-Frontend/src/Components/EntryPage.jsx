@@ -55,23 +55,23 @@ const Login = () => {
     };
   }, [hasInteracted]);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        "https://full-stack-music-backend.onrender.com/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-      localStorage.setItem("token", response.data.token); // Store token
-      navigate("/home"); // Redirect to home
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Login failed. Please check your credentials.");
-    }
-  };
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post(
+  //       "https://full-stack-music-backend.onrender.com/api/auth/login",
+  //       {
+  //         email,
+  //         password,
+  //       }
+  //     );
+  //     localStorage.setItem("token", response.data.token); // Store token
+  //     navigate("/home"); // Redirect to home
+  //   } catch (error) {
+  //     console.error("Login error:", error);
+  //     alert("Login failed. Please check your credentials.");
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center relative">
